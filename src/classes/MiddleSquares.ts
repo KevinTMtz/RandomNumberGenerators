@@ -2,21 +2,24 @@ import { RandomGenerator } from './RandomGenerator';
 
 export class MiddleSquares implements RandomGenerator {
   public seed: number;
+  public randoms: number[];
 
   constructor(seed: number) {
     this.seed = seed;
+    this.randoms = [];
+    this.generateRandoms();
   }
 
   public generateRandoms = async (): Promise<number[]> => {
+    this.randoms = [];
     let set = new Set();
-    const randoms: number[] = [];
     let rnd = this.seed;
     while (!set.has(rnd)) {
-      randoms.push(rnd / 10000);
+      this.randoms.push(rnd / 10000);
       set.add(rnd);
       rnd = this.getNextRandom(rnd);
     }
-    return randoms;
+    return this.randoms;
   };
 
   private getNextRandom = (seed: number): number => {
