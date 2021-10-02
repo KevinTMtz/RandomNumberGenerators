@@ -2,7 +2,7 @@ import { RandomGenerator } from './RandomGenerator';
 
 export class MiddleSquares implements RandomGenerator {
   public seed: number;
-  public randoms: number[];
+  randoms: number[];
 
   constructor(seed: number) {
     this.seed = seed;
@@ -22,9 +22,16 @@ export class MiddleSquares implements RandomGenerator {
     return this.randoms;
   };
 
+  public getRandoms = (): number[] => {
+    return this.randoms;
+  };
+
   private getNextRandom = (seed: number): number => {
     let square: String = '' + Math.pow(seed, 2);
     while (square.length < 8) square = '0' + square;
     return Number(square.substr(2, 4));
   };
 }
+
+const ms = new MiddleSquares(3708);
+console.log(ms.getRandoms());
