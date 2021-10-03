@@ -1,4 +1,4 @@
-import { RandomGenerator } from './RandomGenerator';
+import { RandomGenerator } from '../Interfaces/RandomGenerator';
 
 export class MiddleSquares implements RandomGenerator {
   public seed: number;
@@ -32,6 +32,3 @@ export class MiddleSquares implements RandomGenerator {
     return Number(square.substr(2, 4));
   };
 }
-
-const ms = new MiddleSquares(3708);
-console.log(ms.getRandoms());
