@@ -1,3 +1,4 @@
+import { error } from 'console';
 import { ChiSquareData, ChiSquareCell } from '../Interfaces/ChiSquareData';
 import { Validator } from '../Interfaces/Validator';
 
@@ -9,8 +10,16 @@ export class ChiSquare implements Validator {
   public X0!: number;
   public X1!: number;
 
-  public validate = (randoms: number[], alpha: number): boolean => {
-    this.range = randoms[-1] - randoms[0];
+  public validate = async (
+    randoms: number[],
+    alpha: number,
+  ): Promise<boolean> => {
+    if (randoms.length <= 4) {
+      return Promise.reject(
+        'Not enough information provided to make the validation',
+      );
+    }
+    this.range = randoms[randoms.length - 1] - randoms[0];
     this.k = Math.floor(1 + 3.322 * Math.log10(randoms.length));
     this.classes = this.range / this.k;
     this.createTable(randoms);
@@ -21,7 +30,7 @@ export class ChiSquare implements Validator {
   public getData = (): ChiSquareData => {
     const data: ChiSquareData = {
       range: this.range,
-      k: this.range,
+      k: this.k,
       classes: this.classes,
       table: this.table,
       X0: this.X0,
@@ -36,7 +45,7 @@ export class ChiSquare implements Validator {
     this.table = [];
     this.X0 = 0;
     while (i < this.k) {
-      const start = i * this.classes;
+      let start = i * this.classes;
       let end = (i + 1) * this.classes;
       let absolute = 0;
       while (randoms[j] <= end) {
@@ -46,6 +55,11 @@ export class ChiSquare implements Validator {
           i++;
           end = (i + 1) * this.classes;
         }
+      }
+      if (absolute < 5 && i >= this.k - 1) {
+        const last = this.table.pop();
+        start = last!.start;
+        absolute += last!.absolute;
       }
       const probability = end - start;
       const theoretical = randoms.length * probability;
@@ -60,7 +74,9 @@ export class ChiSquare implements Validator {
       };
       this.table.push(cell);
       this.X0 += cell.result;
+      i++;
     }
+    this.k = this.table.length;
   };
 
   private getTheoreticalValue = (alpha: number) => {
