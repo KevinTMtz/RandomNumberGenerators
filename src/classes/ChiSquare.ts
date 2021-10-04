@@ -4,11 +4,11 @@ import { Validator } from '../Interfaces/Validator';
 
 export class ChiSquare implements Validator {
   public range!: number;
-  public k!: number;
-  public classes!: number;
-  public table!: ChiSquareCell[];
-  public X0!: number;
-  public X1!: number;
+  private k!: number;
+  private classes!: number;
+  private table!: ChiSquareCell[];
+  private X0!: number;
+  private X1!: number;
 
   public validate = async (
     randoms: number[],
@@ -21,7 +21,7 @@ export class ChiSquare implements Validator {
     }
     this.range = randoms[randoms.length - 1] - randoms[0];
     this.k = Math.floor(1 + 3.322 * Math.log10(randoms.length));
-    this.classes = this.range / this.k;
+    this.classes = 1 / this.k;
     this.createTable(randoms);
     this.getTheoreticalValue(alpha);
     return this.X0 < this.X1;
