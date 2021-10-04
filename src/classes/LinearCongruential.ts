@@ -1,3 +1,4 @@
+import { error } from 'console';
 import { ChiSquareData } from '../Interfaces/ChiSquareData';
 import { KolmogorovSmirnovData } from '../Interfaces/KolmogorovSmirnovData';
 import { RandomGenerator } from '../Interfaces/RandomGenerator';
@@ -46,6 +47,8 @@ export class LinearCongruenial implements RandomGenerator {
   };
 
   public getValidationData = (): ChiSquareData | KolmogorovSmirnovData => {
+    if (!this.validator)
+      throw error('To get the validation data, you have to validate first');
     return this.validator.getData();
   };
 }
