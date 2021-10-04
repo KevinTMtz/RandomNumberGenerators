@@ -2,12 +2,10 @@ import { RandomGenerator } from '../Interfaces/RandomGenerator';
 
 export class MiddleSquares implements RandomGenerator {
   public seed: number;
-  randoms: number[];
+  private randoms!: number[];
 
   constructor(seed: number) {
     this.seed = seed;
-    this.randoms = [];
-    this.generateRandoms();
   }
 
   public generateRandoms = async (): Promise<number[]> => {
