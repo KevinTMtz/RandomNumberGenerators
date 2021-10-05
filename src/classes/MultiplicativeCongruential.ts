@@ -40,6 +40,7 @@ export class MultiplicativeCongruential implements RandomGenerator {
   };
 
   public getRandoms = (): number[] => {
+    if (!this.randoms) return [];
     return this.randoms;
   };
 

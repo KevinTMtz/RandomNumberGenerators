@@ -36,6 +36,7 @@ export class LinearCongruenial implements RandomGenerator {
   };
 
   public getRandoms = (): number[] => {
+    if (!this.randoms) return [];
     return this.randoms;
   };
 
