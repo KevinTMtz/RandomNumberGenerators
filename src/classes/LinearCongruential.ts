@@ -20,7 +20,7 @@ export class LinearCongruenial implements RandomGenerator {
 
   public generateRandoms = async (): Promise<number[]> => {
     if (this.seed < 0 || this.a < 0 || this.c < 0 || this.m < 0)
-      Promise.reject('The parameters are not valid');
+      return Promise.reject('The parameters are not valid');
 
     this.randoms = [];
     let set = new Set();

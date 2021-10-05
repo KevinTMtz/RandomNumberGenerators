@@ -9,7 +9,7 @@ export class MiddleSquares implements RandomGenerator {
   }
 
   public generateRandoms = async (): Promise<number[]> => {
-    if (this.seed < 0) Promise.reject('The parameters are not valid');
+    if (this.seed < 0) return Promise.reject('The parameters are not valid');
 
     this.randoms = [];
     let set = new Set();

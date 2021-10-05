@@ -24,7 +24,7 @@ export class MultiplicativeCongruential implements RandomGenerator {
       this.a < 0 ||
       this.m < 0
     )
-      Promise.reject('The parameters are not valid');
+      return Promise.reject('The parameters are not valid');
 
     this.randoms = [];
     let set = new Set();
