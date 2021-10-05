@@ -1,4 +1,5 @@
 export interface KolmogorovSmirnovData {
+  isValid: boolean;
   table: KolmogorovSmirnovCell[];
   deviation_max_plus: number;
   deviation_max_minus: number;

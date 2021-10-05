@@ -4,22 +4,26 @@ import { RandomGenerator } from '../Interfaces/RandomGenerator';
 import { ChiSquare } from './ChiSquare';
 import { KolmogorovSmirnov } from './KolmogorovSmirnov';
 
-export class LinearCongruenial implements RandomGenerator {
+export class MultiplicativeCongruential implements RandomGenerator {
   public seed: number;
   public a: number;
-  public c: number;
   public m: number;
   private randoms!: number[];
 
-  constructor(seed: number, a: number, c: number, m: number) {
+  constructor(seed: number, a: number, m: number) {
     this.seed = seed;
     this.a = a;
-    this.c = c;
     this.m = m;
   }
 
   public generateRandoms = async (): Promise<number[]> => {
-    if (this.seed < 0 || this.a < 0 || this.c < 0 || this.m < 0)
+    if (
+      this.m <= this.a ||
+      this.m <= this.seed ||
+      this.seed < 0 ||
+      this.a < 0 ||
+      this.m < 0
+    )
       Promise.reject('The parameters are not valid');
 
     this.randoms = [];
@@ -28,7 +32,7 @@ export class LinearCongruenial implements RandomGenerator {
     while (!set.has(rnd)) {
       this.randoms.push(rnd / this.m);
       set.add(rnd);
-      rnd = (this.a * rnd + this.c) % this.m;
+      rnd = (this.a * rnd) % this.m;
     }
     return this.randoms;
   };

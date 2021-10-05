@@ -14,23 +14,22 @@ export class KolmogorovSmirnov implements Validator {
   public validate = async (
     randoms: number[],
     alpha: number,
-  ): Promise<boolean> => {
+  ): Promise<KolmogorovSmirnovData> => {
     if (randoms.length < 1) {
       return Promise.reject(
         'Not enough information provided to make the validation',
       );
     }
+
     this.table = [];
     this.deviation_max_plus = 0;
     this.deviation_max_minus = 0;
     this.deviation_max = 0;
     this.createTable(randoms);
     this.getTheoreticalValue(alpha);
-    return this.deviation_max < this.deviation_critical;
-  };
 
-  public getData = () => {
     const data: KolmogorovSmirnovData = {
+      isValid: this.deviation_max < this.deviation_critical,
       table: this.table,
       deviation_max_plus: this.deviation_max_plus,
       deviation_max_minus: this.deviation_max_minus,

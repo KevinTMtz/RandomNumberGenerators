@@ -1,4 +1,5 @@
 export interface ChiSquareData {
+  isValid: boolean;
   range: number;
   k: number;
   classes: number;
