@@ -107,9 +107,3 @@ export class MixedCongruential implements RandomGenerator {
     return validator.validate(this.randoms.sort(), alpha);
   };
 }
-
-const mxc = new MixedCongruential(4, 5, 6, 8);
-mxc.generateRandoms().then(
-  (randoms) => console.log(randoms),
-  (error) => console.log(error),
-);
