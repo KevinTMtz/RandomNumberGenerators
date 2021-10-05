@@ -19,7 +19,15 @@ export class MultiplicativeCongruential implements RandomGenerator {
   }
 
   public generateRandoms = async (): Promise<number[]> => {
-    //TODO: Validar que m>a y m>seed
+    if (
+      this.m <= this.a ||
+      this.m <= this.seed ||
+      this.seed < 0 ||
+      this.a < 0 ||
+      this.m < 0
+    )
+      Promise.reject('The parameters are not valid');
+
     this.randoms = [];
     let set = new Set();
     let rnd = this.seed;
