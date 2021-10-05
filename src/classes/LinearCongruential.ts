@@ -1,4 +1,3 @@
-import { error } from 'console';
 import { ChiSquareData } from '../Interfaces/ChiSquareData';
 import { KolmogorovSmirnovData } from '../Interfaces/KolmogorovSmirnovData';
 import { RandomGenerator } from '../Interfaces/RandomGenerator';
@@ -11,7 +10,6 @@ export class LinearCongruenial implements RandomGenerator {
   public c: number;
   public m: number;
   private randoms!: number[];
-  private validator!: ChiSquare | KolmogorovSmirnov;
 
   constructor(seed: number, a: number, c: number, m: number) {
     this.seed = seed;
@@ -41,18 +39,14 @@ export class LinearCongruenial implements RandomGenerator {
   };
 
   public validate = async (
-    test: 'cs' | 'ks',
+    type: 'CS' | 'KS',
     alpha: number,
-  ): Promise<boolean> => {
+  ): Promise<ChiSquareData | KolmogorovSmirnovData> => {
     if (!this.randoms)
-      Promise.reject('To validate the randoms you need to generate them first');
-    this.validator = test == 'cs' ? new ChiSquare() : new KolmogorovSmirnov();
-    return await this.validator.validate(this.randoms.sort(), alpha);
-  };
-
-  public getValidationData = (): ChiSquareData | KolmogorovSmirnovData => {
-    if (!this.validator)
-      throw error('To get the validation data, you have to validate first');
-    return this.validator.getData();
+      return Promise.reject(
+        'To validate the randoms you need to generate them first',
+      );
+    const validator = type == 'CS' ? new ChiSquare() : new KolmogorovSmirnov();
+    return validator.validate(this.randoms.sort(), alpha);
   };
 }

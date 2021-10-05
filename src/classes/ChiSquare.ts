@@ -1,4 +1,3 @@
-import { error } from 'console';
 import { ChiSquareData, ChiSquareCell } from '../Interfaces/ChiSquareData';
 import { Validator } from '../Interfaces/Validator';
 
@@ -13,22 +12,22 @@ export class ChiSquare implements Validator {
   public validate = async (
     randoms: number[],
     alpha: number,
-  ): Promise<boolean> => {
+  ): Promise<ChiSquareData> => {
     if (randoms.length <= 4) {
       return Promise.reject(
         'Not enough information provided to make the validation',
       );
     }
+
+    this.table = [];
     this.range = randoms[randoms.length - 1] - randoms[0];
     this.k = Math.floor(1 + 3.322 * Math.log10(randoms.length));
     this.classes = 1 / this.k;
     this.createTable(randoms);
     this.getTheoreticalValue(alpha);
-    return this.X0 < this.X1;
-  };
 
-  public getData = (): ChiSquareData => {
     const data: ChiSquareData = {
+      isValid: this.X0 < this.X1,
       range: this.range,
       k: this.k,
       classes: this.classes,
@@ -42,7 +41,6 @@ export class ChiSquare implements Validator {
   private createTable = (randoms: number[]) => {
     let i = 0;
     let j = 0;
-    this.table = [];
     this.X0 = 0;
     while (i < this.k) {
       let start = i * this.classes;
