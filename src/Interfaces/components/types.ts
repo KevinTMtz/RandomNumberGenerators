@@ -6,7 +6,7 @@ export interface InputValues {
 }
 
 export interface GeneratorValues {
-  seed: number;
+  seed?: number;
   a?: number;
   c?: number;
   m?: number;
