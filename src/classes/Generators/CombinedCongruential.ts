@@ -15,11 +15,12 @@ export class CombinedCongruential implements RandomGenerator {
     this.m = m;
   }
 
-  public generateRandoms = async (): Promise<number[]> => {
+  public generateRandoms = async (n?: number): Promise<number[]> => {
     if (
       this.seed.length != this.k ||
       this.a.length != this.k ||
-      this.m.length != this.k
+      this.m.length != this.k ||
+      (n && n <= 0)
     )
       return Promise.reject('The parameters are not valid');
 
@@ -51,6 +52,7 @@ export class CombinedCongruential implements RandomGenerator {
       let rnd = this.getNextRandom(gen_rnds, i, mod);
       this.randoms.push(rnd > 0 ? rnd / (mod + 1) : mod / (mod + 1));
       i++;
+      if (n && i == n) return this.randoms;
     }
     return this.randoms;
   };
@@ -70,6 +72,3 @@ export class CombinedCongruential implements RandomGenerator {
     return this.randoms;
   };
 }
-
-const cc = new CombinedCongruential(2, [1, 3], [3, 5], [5, 7]);
-cc.generateRandoms().then((randoms) => console.log(randoms));

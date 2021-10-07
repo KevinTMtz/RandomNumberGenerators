@@ -69,13 +69,14 @@ export class MixedCongruential implements RandomGenerator {
     );
   };
 
-  public generateRandoms = async (): Promise<number[]> => {
+  public generateRandoms = async (n?: number): Promise<number[]> => {
     if (
       !this.validHullDobell() ||
       this.seed < 0 ||
       this.a < 0 ||
       this.c < 0 ||
-      this.m < 0
+      this.m < 0 ||
+      (n && n <= 0)
     )
       return Promise.reject('The parameters are not valid');
 
@@ -86,6 +87,7 @@ export class MixedCongruential implements RandomGenerator {
       this.randoms.push(rnd / this.m);
       set.add(rnd);
       rnd = (this.a * rnd + this.c) % this.m;
+      if (n && this.randoms.length == n) return this.randoms;
     }
     return this.randoms;
   };

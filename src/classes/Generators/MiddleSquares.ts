@@ -8,8 +8,9 @@ export class MiddleSquares implements RandomGenerator {
     this.seed = seed;
   }
 
-  public generateRandoms = async (): Promise<number[]> => {
-    if (this.seed < 0) return Promise.reject('The parameters are not valid');
+  public generateRandoms = async (n?: number): Promise<number[]> => {
+    if (this.seed < 0 || (n && n <= 0))
+      return Promise.reject('The parameters are not valid');
 
     this.randoms = [];
     let set = new Set();
@@ -18,6 +19,7 @@ export class MiddleSquares implements RandomGenerator {
       this.randoms.push(rnd / 10000);
       set.add(rnd);
       rnd = this.getNextRandom(rnd);
+      if (n && this.randoms.length == n) return this.randoms;
     }
     return this.randoms;
   };

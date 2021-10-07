@@ -18,8 +18,14 @@ export class LinearCongruenial implements RandomGenerator {
     this.m = m;
   }
 
-  public generateRandoms = async (): Promise<number[]> => {
-    if (this.seed < 0 || this.a < 0 || this.c < 0 || this.m < 0)
+  public generateRandoms = async (n?: number): Promise<number[]> => {
+    if (
+      this.seed < 0 ||
+      this.a < 0 ||
+      this.c < 0 ||
+      this.m < 0 ||
+      (n && n <= 0)
+    )
       return Promise.reject('The parameters are not valid');
 
     this.randoms = [];
@@ -29,6 +35,7 @@ export class LinearCongruenial implements RandomGenerator {
       this.randoms.push(rnd / this.m);
       set.add(rnd);
       rnd = (this.a * rnd + this.c) % this.m;
+      if (n && this.randoms.length == n) return this.randoms;
     }
     return this.randoms;
   };

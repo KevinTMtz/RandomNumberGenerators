@@ -1,4 +1,4 @@
 export interface RandomGenerator {
-  generateRandoms(): Promise<number[]>;
+  generateRandoms(n?: number): Promise<number[]>;
   getRandoms(): number[];
 }
