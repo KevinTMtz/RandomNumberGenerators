@@ -1,8 +1,8 @@
-import { ChiSquareData } from '../Interfaces/ChiSquareData';
-import { KolmogorovSmirnovData } from '../Interfaces/KolmogorovSmirnovData';
-import { RandomGenerator } from '../Interfaces/RandomGenerator';
-import { ChiSquare } from './ChiSquare';
-import { KolmogorovSmirnov } from './KolmogorovSmirnov';
+import { ChiSquareData } from '../../Interfaces/ChiSquareData';
+import { KolmogorovSmirnovData } from '../../Interfaces/KolmogorovSmirnovData';
+import { RandomGenerator } from '../../Interfaces/RandomGenerator';
+import { ChiSquare } from '../Validators/ChiSquare';
+import { KolmogorovSmirnov } from '../Validators/KolmogorovSmirnov';
 
 export class MixedCongruential implements RandomGenerator {
   public seed: number;

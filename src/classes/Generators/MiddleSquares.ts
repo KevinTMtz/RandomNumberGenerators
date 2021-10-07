@@ -1,4 +1,4 @@
-import { RandomGenerator } from '../Interfaces/RandomGenerator';
+import { RandomGenerator } from '../../Interfaces/RandomGenerator';
 
 export class MiddleSquares implements RandomGenerator {
   public seed: number;

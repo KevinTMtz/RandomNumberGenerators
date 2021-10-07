@@ -1,5 +1,4 @@
-import { log } from 'console';
-import { RandomGenerator } from '../Interfaces/RandomGenerator';
+import { RandomGenerator } from '../../Interfaces/RandomGenerator';
 import { MultiplicativeCongruential } from './MultiplicativeCongruential';
 
 export class CombinedCongruential implements RandomGenerator {
