@@ -1,4 +1,9 @@
+import { InputValues } from './InputValues';
+
 export interface RandomGenerator {
-  generateRandoms(n?: number): Promise<number[]>;
+  generateRandoms(
+    values: InputValues | InputValues[],
+    n?: number,
+  ): Promise<number[]>;
   getRandoms(): number[];
 }

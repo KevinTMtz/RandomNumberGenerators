@@ -1,39 +1,42 @@
 import { ChiSquareData } from '../../Interfaces/ChiSquareData';
+import { InputValues } from '../../Interfaces/InputValues';
 import { KolmogorovSmirnovData } from '../../Interfaces/KolmogorovSmirnovData';
 import { RandomGenerator } from '../../Interfaces/RandomGenerator';
 import { ChiSquare } from '../Validators/ChiSquare';
 import { KolmogorovSmirnov } from '../Validators/KolmogorovSmirnov';
 
 export class MultiplicativeCongruential implements RandomGenerator {
-  public seed: number;
-  public a: number;
-  public m: number;
   private randoms!: number[];
 
-  constructor(seed: number, a: number, m: number) {
-    this.seed = seed;
-    this.a = a;
-    this.m = m;
-  }
+  private validateInput = (values: InputValues) => {
+    return (
+      values &&
+      values.seed &&
+      values.seed > 0 &&
+      values.a &&
+      values.a > 0 &&
+      !values.c &&
+      values.m &&
+      values.m > 0 &&
+      values.m > values.a &&
+      values.m > values.seed
+    );
+  };
 
-  public generateRandoms = async (n?: number): Promise<number[]> => {
-    if (
-      this.m <= this.a ||
-      this.m <= this.seed ||
-      this.seed < 0 ||
-      this.a < 0 ||
-      this.m < 0 ||
-      (n && n <= 0)
-    )
+  public generateRandoms = async (
+    values: InputValues,
+    n?: number,
+  ): Promise<number[]> => {
+    if (!this.validateInput(values) || (n && n <= 0))
       return Promise.reject('The parameters are not valid');
 
     this.randoms = [];
     let set = new Set();
-    let rnd = this.seed;
+    let rnd = values.seed;
     while (!set.has(rnd)) {
-      this.randoms.push(rnd / this.m);
+      this.randoms.push(rnd / values.m!);
       set.add(rnd);
-      rnd = (this.a * rnd) % this.m;
+      rnd = (values.a! * rnd) % values.m!;
       if (n && this.randoms.length == n) return this.randoms;
     }
     return this.randoms;
@@ -56,3 +59,10 @@ export class MultiplicativeCongruential implements RandomGenerator {
     return validator.validate(this.randoms.sort(), alpha);
   };
 }
+
+const mc = new MultiplicativeCongruential();
+const input: InputValues = {
+  seed: 51,
+  a: 3,
+  m: 2,
+};

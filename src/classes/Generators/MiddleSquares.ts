@@ -1,20 +1,30 @@
+import { InputValues } from '../../Interfaces/InputValues';
 import { RandomGenerator } from '../../Interfaces/RandomGenerator';
 
 export class MiddleSquares implements RandomGenerator {
-  public seed: number;
   private randoms!: number[];
 
-  constructor(seed: number) {
-    this.seed = seed;
-  }
+  private validateInput = (values: InputValues) => {
+    return (
+      values &&
+      values.seed &&
+      values.seed > 0 &&
+      !values.a &&
+      !values.c &&
+      !values.m
+    );
+  };
 
-  public generateRandoms = async (n?: number): Promise<number[]> => {
-    if (this.seed < 0 || (n && n <= 0))
+  public generateRandoms = async (
+    values: InputValues,
+    n?: number,
+  ): Promise<number[]> => {
+    if (!this.validateInput(values) || (n && n <= 0))
       return Promise.reject('The parameters are not valid');
 
     this.randoms = [];
     let set = new Set();
-    let rnd = this.seed;
+    let rnd = values.seed;
     while (!set.has(rnd)) {
       this.randoms.push(rnd / 10000);
       set.add(rnd);
