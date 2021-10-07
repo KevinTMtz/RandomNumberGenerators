@@ -1,10 +1,10 @@
-import { InputValues } from '../../Interfaces/InputValues';
-import { RandomGenerator } from '../../Interfaces/RandomGenerator';
+import { GeneratorValues } from '../../Interfaces/components/types';
+import { RandomGenerator } from '../../Interfaces/Generators/RandomGenerator';
 
 export class MiddleSquares implements RandomGenerator {
   private randoms!: number[];
 
-  private validateInput = (values: InputValues) => {
+  private validateInput = (values: GeneratorValues) => {
     return (
       values &&
       values.seed &&
@@ -16,7 +16,7 @@ export class MiddleSquares implements RandomGenerator {
   };
 
   public generateRandoms = async (
-    values: InputValues,
+    values: GeneratorValues,
     n?: number,
   ): Promise<number[]> => {
     if (!this.validateInput(values) || (n && n <= 0))

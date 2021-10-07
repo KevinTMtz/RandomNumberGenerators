@@ -1,5 +1,8 @@
-import { ChiSquareData, ChiSquareCell } from '../../Interfaces/ChiSquareData';
-import { Validator } from '../../Interfaces/Validator';
+import {
+  ChiSquareData,
+  ChiSquareCell,
+} from '../../Interfaces/Validators/ChiSquareData';
+import { Validator } from '../../Interfaces/Validators/Validator';
 
 export class ChiSquare implements Validator {
   public range!: number;

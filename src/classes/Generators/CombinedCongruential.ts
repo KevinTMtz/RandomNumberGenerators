@@ -1,11 +1,11 @@
-import { InputValues } from '../../Interfaces/InputValues';
-import { RandomGenerator } from '../../Interfaces/RandomGenerator';
+import { GeneratorValues } from '../../Interfaces/components/types';
+import { RandomGenerator } from '../../Interfaces/Generators/RandomGenerator';
 import { MultiplicativeCongruential } from './MultiplicativeCongruential';
 
 export class CombinedCongruential implements RandomGenerator {
   private randoms!: number[];
 
-  private validateInput = (values: InputValues[]) => {
+  private validateInput = (values: GeneratorValues[]) => {
     if (!values || values.length == 0) return false;
     values.forEach((val) => {
       if (
@@ -24,7 +24,7 @@ export class CombinedCongruential implements RandomGenerator {
   };
 
   public generateRandoms = async (
-    values: InputValues[],
+    values: GeneratorValues[],
     n?: number,
   ): Promise<number[]> => {
     if (values.length < 2 || !this.validateInput(values) || (n && n <= 0))

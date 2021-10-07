@@ -1,8 +1,8 @@
-import { InputValues } from './InputValues';
+import { GeneratorValues } from '../components/types';
 
 export interface RandomGenerator {
   generateRandoms(
-    values: InputValues | InputValues[],
+    values: GeneratorValues | GeneratorValues[],
     n?: number,
   ): Promise<number[]>;
   getRandoms(): number[];

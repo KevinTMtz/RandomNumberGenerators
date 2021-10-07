@@ -1,14 +1,14 @@
-import { ChiSquareData } from '../../Interfaces/ChiSquareData';
-import { InputValues } from '../../Interfaces/InputValues';
-import { KolmogorovSmirnovData } from '../../Interfaces/KolmogorovSmirnovData';
-import { RandomGenerator } from '../../Interfaces/RandomGenerator';
+import { ChiSquareData } from '../../Interfaces/Validators/ChiSquareData';
+import { KolmogorovSmirnovData } from '../../Interfaces/Validators/KolmogorovSmirnovData';
+import { RandomGenerator } from '../../Interfaces/Generators/RandomGenerator';
 import { ChiSquare } from '../Validators/ChiSquare';
 import { KolmogorovSmirnov } from '../Validators/KolmogorovSmirnov';
+import { GeneratorValues } from '../../Interfaces/components/types';
 
 export class LinearCongruenial implements RandomGenerator {
   private randoms!: number[];
 
-  private validateInput = (values: InputValues) => {
+  private validateInput = (values: GeneratorValues) => {
     return (
       values &&
       values.seed &&
@@ -23,7 +23,7 @@ export class LinearCongruenial implements RandomGenerator {
   };
 
   public generateRandoms = async (
-    values: InputValues,
+    values: GeneratorValues,
     n?: number,
   ): Promise<number[]> => {
     if (!this.validateInput(values) || (n && n <= 0))

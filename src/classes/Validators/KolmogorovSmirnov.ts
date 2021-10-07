@@ -1,8 +1,8 @@
 import {
   KolmogorovSmirnovCell,
   KolmogorovSmirnovData,
-} from '../../Interfaces/KolmogorovSmirnovData';
-import { Validator } from '../../Interfaces/Validator';
+} from '../../Interfaces/Validators/KolmogorovSmirnovData';
+import { Validator } from '../../Interfaces/Validators/Validator';
 
 export class KolmogorovSmirnov implements Validator {
   private table!: KolmogorovSmirnovCell[];
