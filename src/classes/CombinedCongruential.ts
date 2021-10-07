@@ -1,3 +1,4 @@
+import { log } from 'console';
 import { RandomGenerator } from '../Interfaces/RandomGenerator';
 import { MultiplicativeCongruential } from './MultiplicativeCongruential';
 
@@ -24,7 +25,6 @@ export class CombinedCongruential implements RandomGenerator {
       return Promise.reject('The parameters are not valid');
 
     this.randoms = [];
-    let set = new Set();
 
     const gen_rnds: number[][] = [];
     for (let i = 0; i < this.k; i++) {
@@ -39,14 +39,19 @@ export class CombinedCongruential implements RandomGenerator {
       );
     }
 
-    const mod = this.m[0] - 1;
+    let period = 1;
+    let mod = 0;
+    this.m.forEach((m) => {
+      period *= m - 1;
+      mod = Math.max(mod, m);
+    });
+    period /= 2;
+
     let i = 0;
-    let rnd = this.getNextRandom(gen_rnds, i, mod);
-    while (!set.has(rnd)) {
+    while (i < period) {
+      let rnd = this.getNextRandom(gen_rnds, i, mod);
+      this.randoms.push(rnd > 0 ? rnd / (mod + 1) : mod / (mod + 1));
       i++;
-      this.randoms.push(rnd);
-      set.add(rnd);
-      rnd = this.getNextRandom(gen_rnds, i, mod);
     }
     return this.randoms;
   };
@@ -55,12 +60,10 @@ export class CombinedCongruential implements RandomGenerator {
     let rnd = 0;
     let mult = 1;
     for (let j = 0; j < this.k; j++) {
-      rnd += mult * gen_rnds[j][col % gen_rnds[j].length];
+      rnd += mult * gen_rnds[j][col % gen_rnds[j].length] * this.m[j];
       mult *= -1;
     }
-    console.log(col + ': ' + rnd);
-    rnd = rnd % mod;
-    return rnd > 0 ? rnd / (mod + 1) : mod / (mod + 1);
+    return rnd >= 0 ? rnd % mod : (rnd % mod) + mod;
   };
 
   public getRandoms = (): number[] => {
