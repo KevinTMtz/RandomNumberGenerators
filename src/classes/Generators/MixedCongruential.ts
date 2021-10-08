@@ -6,7 +6,7 @@ import {
 } from '../../Interfaces/Generators/RandomGenerator';
 import { ChiSquare } from '../Validators/ChiSquare';
 import { KolmogorovSmirnov } from '../Validators/KolmogorovSmirnov';
-import { GeneratorValues } from '../../Interfaces/components/types';
+import { GeneratorValues } from '../../Interfaces/data/types';
 
 export const MixedCongruential: RandomGenerator &
   RandomValidator = class MixedCongruential {

@@ -1,4 +1,4 @@
-import { GeneratorValues } from '../components/types';
+import { GeneratorValues } from '../data/types';
 import { ChiSquareData } from '../Validators/ChiSquareData';
 import { KolmogorovSmirnovData } from '../Validators/KolmogorovSmirnovData';
 

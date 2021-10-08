@@ -1,4 +1,4 @@
-import { GeneratorValues } from '../../Interfaces/components/types';
+import { GeneratorValues } from '../../Interfaces/data/types';
 import { RandomGenerator } from '../../Interfaces/Generators/RandomGenerator';
 
 export const MiddleSquares: RandomGenerator = class MiddleSquares {

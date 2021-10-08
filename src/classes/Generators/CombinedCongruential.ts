@@ -1,4 +1,4 @@
-import { GeneratorValues } from '../../Interfaces/components/types';
+import { GeneratorValues } from '../../Interfaces/data/types';
 import { RandomGenerator } from '../../Interfaces/Generators/RandomGenerator';
 import { MultiplicativeCongruential } from './MultiplicativeCongruential';
 

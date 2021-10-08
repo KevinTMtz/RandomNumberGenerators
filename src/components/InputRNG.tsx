@@ -2,7 +2,7 @@
 import React from 'react';
 import { css } from '@mui/styled-engine';
 import { TextField } from '@mui/material';
-import { InputValues } from '../Interfaces/components/types';
+import { InputValues } from '../Interfaces/data/types';
 import { RNGOptions } from '../enums/RNGOptions';
 
 const rngInputsStyle = css({
@@ -23,12 +23,13 @@ interface InputRNGProps {
     inputVals: InputValues[],
     numOfRan?: string | undefined,
   ) => void;
+  randomsListLength: number;
 }
 
 const InputRNG = (props: InputRNGProps) => {
   const handleInputChange = (name: string, strNumber: string) => {
     const number = Number(strNumber);
-    if (!number && strNumber !== '') return;
+    if (isNaN(number) && strNumber !== '') return;
 
     const updatedArr = [...props.inputValuesArr];
     let updatedObject: { [key: string]: string } = {
@@ -52,6 +53,8 @@ const InputRNG = (props: InputRNGProps) => {
           onChange={(event) =>
             handleInputChange('seed', event.target.value)
           }
+          disabled={props.randomsListLength > 0}
+          required
         />
         {props.optionRNG !== RNGOptions.MiddleSquares && (
           <>
@@ -62,6 +65,8 @@ const InputRNG = (props: InputRNGProps) => {
               onChange={(event) =>
                 handleInputChange('a', event.target.value)
               }
+              disabled={props.randomsListLength > 0}
+              required
             />
             {props.optionRNG !== RNGOptions.MultiplicativeCongruential && (
               <TextField
@@ -71,6 +76,8 @@ const InputRNG = (props: InputRNGProps) => {
                 onChange={(event) =>
                   handleInputChange('c', event.target.value)
                 }
+                disabled={props.randomsListLength > 0}
+                required
               />
             )}
             <TextField
@@ -80,6 +87,8 @@ const InputRNG = (props: InputRNGProps) => {
               onChange={(event) =>
                 handleInputChange('m', event.target.value)
               }
+              disabled={props.randomsListLength > 0}
+              required
             />
           </>
         )}

@@ -17,6 +17,14 @@ const RandomsListDiv = css({
   gap: '16px',
 });
 
+const RandomsListBox = css({
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  '&:hover': {
+    border: '1px solid black',
+  },
+});
+
 interface RandomsListProps {
   numsList: number[];
 }
@@ -32,9 +40,7 @@ const RandomsList = (props: RandomsListProps) => {
         <ListItemButton
           style={{ height: `${rowHeight}px` }}
           onClick={() => {
-            navigator.clipboard.writeText(
-              props.numsList[index].toString(),
-            );
+            navigator.clipboard.writeText(String(props.numsList[index]));
           }}
         >
           <ListItemText primary={props.numsList[index]} />
@@ -45,9 +51,9 @@ const RandomsList = (props: RandomsListProps) => {
 
   return (
     <div css={RandomsListDiv}>
-      <Box>
+      <Box css={RandomsListBox}>
         <FixedSizeList
-          height={350}
+          height={Math.min(300, props.numsList.length * 30)}
           width='100%'
           itemSize={rowHeight}
           itemCount={props.numsList.length}
