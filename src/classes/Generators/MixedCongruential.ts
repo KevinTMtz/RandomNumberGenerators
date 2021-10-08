@@ -113,22 +113,8 @@ export const MixedCongruential: RandomGenerator &
       return Promise.reject(
         'To validate the randoms you need to generate them first',
       );
-    const validator = type == 'CS' ? new ChiSquare() : new KolmogorovSmirnov();
-    return validator.validate(this.randoms.sort(), alpha);
+    return type == 'CS'
+      ? ChiSquare.validate(this.randoms.sort(), alpha)
+      : KolmogorovSmirnov.validate(this.randoms.sort(), alpha);
   };
 };
-
-const input: GeneratorValues = {
-  seed: 4,
-  a: 5,
-  c: 7,
-  m: 8,
-};
-
-MixedCongruential.generateRandoms(input).then(
-  (randoms) => {
-    console.log(randoms);
-    MixedCongruential.validate('KS', 0).then((data) => console.log(data));
-  },
-  (error) => console.log(error),
-);

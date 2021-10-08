@@ -59,13 +59,8 @@ export const MultiplicativeCongruential: RandomGenerator &
       return Promise.reject(
         'To validate the randoms you need to generate them first',
       );
-    const validator = type == 'CS' ? new ChiSquare() : new KolmogorovSmirnov();
-    return validator.validate(this.randoms.sort(), alpha);
+    return type == 'CS'
+      ? ChiSquare.validate(this.randoms.sort(), alpha)
+      : KolmogorovSmirnov.validate(this.randoms.sort(), alpha);
   };
-};
-
-const input: GeneratorValues = {
-  seed: 117,
-  a: 43,
-  m: 1000,
 };

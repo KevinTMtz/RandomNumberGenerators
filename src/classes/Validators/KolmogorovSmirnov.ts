@@ -4,14 +4,14 @@ import {
 } from '../../Interfaces/Validators/KolmogorovSmirnovData';
 import { Validator } from '../../Interfaces/Validators/Validator';
 
-export class KolmogorovSmirnov implements Validator {
-  private table!: KolmogorovSmirnovCell[];
-  private deviation_max_plus!: number;
-  private deviation_max_minus!: number;
-  private deviation_max!: number;
-  private deviation_critical!: number;
+export const KolmogorovSmirnov: Validator = class KolmogorovSmirnov {
+  private static table: KolmogorovSmirnovCell[];
+  private static deviation_max_plus: number;
+  private static deviation_max_minus: number;
+  private static deviation_max: number;
+  private static deviation_critical: number;
 
-  public validate = async (
+  public static validate = async (
     randoms: number[],
     alpha: number,
   ): Promise<KolmogorovSmirnovData> => {
@@ -39,7 +39,7 @@ export class KolmogorovSmirnov implements Validator {
     return data;
   };
 
-  private createTable = (randoms: number[]) => {
+  private static createTable = (randoms: number[]) => {
     let i = 1;
     const n = randoms.length;
     randoms.forEach((rnd) => {
@@ -75,9 +75,9 @@ export class KolmogorovSmirnov implements Validator {
     });
   };
 
-  private getTheoreticalValue = (alpha: number) => {
+  private static getTheoreticalValue = (alpha: number) => {
     const n = this.table.length;
     //TODO: Get value from tables with n and alpha
     this.deviation_critical = Number.MAX_SAFE_INTEGER;
   };
-}
+};

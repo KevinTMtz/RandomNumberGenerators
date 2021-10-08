@@ -45,11 +45,3 @@ export const MiddleSquares: RandomGenerator = class MiddleSquares {
     return Number(square.substr(2, 4));
   };
 };
-
-const input: GeneratorValues = {
-  seed: 3547,
-};
-
-MiddleSquares.generateRandoms(input).then((randoms) =>
-  console.log(MiddleSquares.getRandoms()),
-);

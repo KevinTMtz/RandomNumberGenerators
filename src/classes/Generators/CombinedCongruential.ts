@@ -85,13 +85,3 @@ export const CombinedCongruential: RandomGenerator = class CombinedCongruential 
     return this.randoms;
   };
 };
-
-const input: GeneratorValues[] = [
-  { seed: 1, a: 3, m: 5 },
-  { seed: 3, a: 5, m: 7 },
-];
-
-CombinedCongruential.generateRandoms(input).then(
-  (randoms) => console.log(randoms),
-  (error) => console.log(error),
-);
