@@ -58,22 +58,21 @@ const Layout = () => {
 
   const [randomsList, setRandomsList] = useState<number[]>([]);
 
-  let requiredByOption: { [key: string]: string[] } = {
-    1: ['seed'],
-    2: ['seed', 'a', 'c', 'm'],
-    3: ['seed', 'a', 'c', 'm'],
-    4: ['seed', 'a', 'c', 'm'],
-    5: ['seed', 'a', 'm'],
-  };
+  let requiredByOption: { [key: string]: string[] } = {};
+  requiredByOption[RNGOptions.MiddleSquares] = ['seed'];
+  requiredByOption[RNGOptions.LinearCongruential] = ['seed', 'a', 'c', 'm'];
+  requiredByOption[RNGOptions.MixedCongruential] = ['seed', 'a', 'c', 'm'];
+  requiredByOption[RNGOptions.CombinedCongruential] = ['seed', 'a', 'm'];
+  requiredByOption[RNGOptions.MultiplicativeCongruential] = ['seed', 'a', 'm'];
 
   const handleRNGChange = (event: SelectChangeEvent) => {
     const option = event.target.value;
 
     setOptionRNG(option);
 
-    let numOfG = '';
+    let numOfG = option !== RNGOptions.CombinedCongruential ? '1' : '2';
     handleChangeGenerators(numOfG, option);
-    setNumOfGenerators(numOfG);
+    setNumOfGenerators('');
 
     validateCompleteInput([emptyObjectValues]);
   };
@@ -97,8 +96,7 @@ const Layout = () => {
 
     if (
       strNumOfGenerators === '' ||
-      (strNumOfGenerators === '1' &&
-        option === RNGOptions.CombinedCongruential)
+      (strNumOfGenerators === '1' && option === RNGOptions.CombinedCongruential)
     ) {
       setNumOfGenerators(strNumOfGenerators);
       number = 2;
@@ -132,6 +130,7 @@ const Layout = () => {
     if (optionRNG === RNGOptions.CombinedCongruential) {
       await CombinedCongruential.generateRandoms(
         convertInputToValues(inputValues),
+        numOfRandomsValue,
       ).then(
         (randoms) => {
           setRandomsList(randoms);
@@ -139,14 +138,10 @@ const Layout = () => {
         (error) => console.log(error),
       );
     } else {
-      const valuesObj: GeneratorValues =
-        convertInputToValues(inputValues)[0];
+      const valuesObj: GeneratorValues = convertInputToValues(inputValues)[0];
 
       if (optionRNG === RNGOptions.MiddleSquares) {
-        await MiddleSquares.generateRandoms(
-          valuesObj,
-          numOfRandomsValue,
-        ).then(
+        await MiddleSquares.generateRandoms(valuesObj, numOfRandomsValue).then(
           (randoms) => {
             setRandomsList(randoms);
           },
@@ -235,9 +230,7 @@ const Layout = () => {
             label='Number of randoms'
             variant='outlined'
             value={numOfRandoms}
-            onChange={(event) =>
-              handleChangeNumOfRandom(event.target.value)
-            }
+            onChange={(event) => handleChangeNumOfRandom(event.target.value)}
             disabled={randomsList.length > 0}
           />
 
@@ -297,8 +290,7 @@ const Layout = () => {
           <>
             <h1>Random numbers generated</h1>
             <p>
-              Total randoms generated:{' '}
-              <strong>{randomsList.length}</strong>
+              Total randoms generated: <strong>{randomsList.length}</strong>
             </p>
             <RandomsList numsList={randomsList} />
           </>

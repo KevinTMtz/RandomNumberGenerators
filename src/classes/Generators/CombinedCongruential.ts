@@ -6,7 +6,7 @@ export const CombinedCongruential: RandomGenerator = class CombinedCongruential 
   private static randoms: number[];
 
   private static validateInput = (values: GeneratorValues[]) => {
-    if (!values || values.length === 0) return false;
+    if (!values || values.length < 2) return false;
     for (const val of values) {
       if (
         !val ||
@@ -28,7 +28,7 @@ export const CombinedCongruential: RandomGenerator = class CombinedCongruential 
     values: GeneratorValues[],
     n?: number,
   ): Promise<number[]> => {
-    if (values.length < 2 || this.validateInput(values) || (n && n <= 0)) {
+    if (!this.validateInput(values) || (n && n <= 0)) {
       return Promise.reject('The parameters are not valid');
     }
     this.randoms = [];

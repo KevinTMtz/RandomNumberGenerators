@@ -50,9 +50,7 @@ const InputRNG = (props: InputRNGProps) => {
           label='Seed'
           variant='outlined'
           value={props.inputValuesArr[props.index].seed}
-          onChange={(event) =>
-            handleInputChange('seed', event.target.value)
-          }
+          onChange={(event) => handleInputChange('seed', event.target.value)}
           disabled={props.randomsListLength > 0}
           required
         />
@@ -62,31 +60,28 @@ const InputRNG = (props: InputRNGProps) => {
               label='A'
               variant='outlined'
               value={props.inputValuesArr[props.index].a}
-              onChange={(event) =>
-                handleInputChange('a', event.target.value)
-              }
+              onChange={(event) => handleInputChange('a', event.target.value)}
               disabled={props.randomsListLength > 0}
               required
             />
-            {props.optionRNG !== RNGOptions.MultiplicativeCongruential && (
-              <TextField
-                label='C'
-                variant='outlined'
-                value={props.inputValuesArr[props.index].c}
-                onChange={(event) =>
-                  handleInputChange('c', event.target.value)
-                }
-                disabled={props.randomsListLength > 0}
-                required
-              />
-            )}
+            {props.optionRNG !== RNGOptions.MultiplicativeCongruential &&
+              props.optionRNG !== RNGOptions.CombinedCongruential && (
+                <TextField
+                  label='C'
+                  variant='outlined'
+                  value={props.inputValuesArr[props.index].c}
+                  onChange={(event) =>
+                    handleInputChange('c', event.target.value)
+                  }
+                  disabled={props.randomsListLength > 0}
+                  required
+                />
+              )}
             <TextField
               label='M'
               variant='outlined'
               value={props.inputValuesArr[props.index].m}
-              onChange={(event) =>
-                handleInputChange('m', event.target.value)
-              }
+              onChange={(event) => handleInputChange('m', event.target.value)}
               disabled={props.randomsListLength > 0}
               required
             />
