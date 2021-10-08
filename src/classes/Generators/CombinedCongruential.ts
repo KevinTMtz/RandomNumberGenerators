@@ -1,4 +1,4 @@
-import { GeneratorValues } from '../../Interfaces/components/types';
+import { GeneratorValues } from '../../Interfaces/data/types';
 import { RandomGenerator } from '../../Interfaces/Generators/RandomGenerator';
 import { MultiplicativeCongruential } from './MultiplicativeCongruential';
 
@@ -6,7 +6,7 @@ export const CombinedCongruential: RandomGenerator = class CombinedCongruential 
   private static randoms: number[];
 
   private static validateInput = (values: GeneratorValues[]) => {
-    if (!values || values.length == 0) return false;
+    if (!values || values.length < 2) return false;
     for (const val of values) {
       if (
         !val ||
@@ -28,7 +28,7 @@ export const CombinedCongruential: RandomGenerator = class CombinedCongruential 
     values: GeneratorValues[],
     n?: number,
   ): Promise<number[]> => {
-    if (values.length < 2 || !this.validateInput(values) || (n && n <= 0)) {
+    if (!this.validateInput(values) || (n && n <= 0)) {
       return Promise.reject('The parameters are not valid');
     }
     this.randoms = [];
@@ -60,7 +60,7 @@ export const CombinedCongruential: RandomGenerator = class CombinedCongruential 
       let rnd = this.getNextRandom(gen_rnds, i, mod, k);
       this.randoms.push(rnd > 0 ? rnd / mod : (mod - 1) / mod);
       i++;
-      if (n && i == n) return this.randoms;
+      if (n && i === n) return this.randoms;
     }
     return this.randoms;
   };

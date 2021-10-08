@@ -2,7 +2,7 @@
 import React from 'react';
 import { css } from '@mui/styled-engine';
 import { TextField } from '@mui/material';
-import { InputValues } from '../Interfaces/components/types';
+import { InputValues } from '../Interfaces/data/types';
 import { RNGOptions } from '../enums/RNGOptions';
 
 const rngInputsStyle = css({
@@ -23,12 +23,13 @@ interface InputRNGProps {
     inputVals: InputValues[],
     numOfRan?: string | undefined,
   ) => void;
+  randomsListLength: number;
 }
 
 const InputRNG = (props: InputRNGProps) => {
   const handleInputChange = (name: string, strNumber: string) => {
     const number = Number(strNumber);
-    if (!number && strNumber !== '') return;
+    if (isNaN(number) && strNumber !== '') return;
 
     const updatedArr = [...props.inputValuesArr];
     let updatedObject: { [key: string]: string } = {
@@ -49,9 +50,9 @@ const InputRNG = (props: InputRNGProps) => {
           label='Seed'
           variant='outlined'
           value={props.inputValuesArr[props.index].seed}
-          onChange={(event) =>
-            handleInputChange('seed', event.target.value)
-          }
+          onChange={(event) => handleInputChange('seed', event.target.value)}
+          disabled={props.randomsListLength > 0}
+          required
         />
         {props.optionRNG !== RNGOptions.MiddleSquares && (
           <>
@@ -59,27 +60,30 @@ const InputRNG = (props: InputRNGProps) => {
               label='A'
               variant='outlined'
               value={props.inputValuesArr[props.index].a}
-              onChange={(event) =>
-                handleInputChange('a', event.target.value)
-              }
+              onChange={(event) => handleInputChange('a', event.target.value)}
+              disabled={props.randomsListLength > 0}
+              required
             />
-            {props.optionRNG !== RNGOptions.MultiplicativeCongruential && (
-              <TextField
-                label='C'
-                variant='outlined'
-                value={props.inputValuesArr[props.index].c}
-                onChange={(event) =>
-                  handleInputChange('c', event.target.value)
-                }
-              />
-            )}
+            {props.optionRNG !== RNGOptions.MultiplicativeCongruential &&
+              props.optionRNG !== RNGOptions.CombinedCongruential && (
+                <TextField
+                  label='C'
+                  variant='outlined'
+                  value={props.inputValuesArr[props.index].c}
+                  onChange={(event) =>
+                    handleInputChange('c', event.target.value)
+                  }
+                  disabled={props.randomsListLength > 0}
+                  required
+                />
+              )}
             <TextField
               label='M'
               variant='outlined'
               value={props.inputValuesArr[props.index].m}
-              onChange={(event) =>
-                handleInputChange('m', event.target.value)
-              }
+              onChange={(event) => handleInputChange('m', event.target.value)}
+              disabled={props.randomsListLength > 0}
+              required
             />
           </>
         )}

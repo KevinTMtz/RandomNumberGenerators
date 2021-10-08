@@ -6,7 +6,7 @@ import {
 } from '../../Interfaces/Generators/RandomGenerator';
 import { ChiSquare } from '../Validators/ChiSquare';
 import { KolmogorovSmirnov } from '../Validators/KolmogorovSmirnov';
-import { GeneratorValues } from '../../Interfaces/components/types';
+import { GeneratorValues } from '../../Interfaces/data/types';
 
 export const MixedCongruential: RandomGenerator &
   RandomValidator = class MixedCongruential {
@@ -31,7 +31,7 @@ export const MixedCongruential: RandomGenerator &
       let i = 2;
       let limit = Math.min(c, m);
       while (i <= limit) {
-        if (m % i == 0 && c % i == 0) return false;
+        if (m % i === 0 && c % i === 0) return false;
         i++;
       }
       return true;
@@ -57,15 +57,15 @@ export const MixedCongruential: RandomGenerator &
 
       const primes = getPrimes(m);
       primes.forEach((prime) => {
-        if (m % prime == 0 && (a - 1) % prime != 0) return false;
+        if (m % prime === 0 && (a - 1) % prime !== 0) return false;
       });
 
       return true;
     };
 
     const FourDivision = (a: number, m: number): boolean => {
-      if (m % 4 == 0) {
-        return (a - 1) % 4 == 0 ? true : false;
+      if (m % 4 === 0) {
+        return (a - 1) % 4 === 0 ? true : false;
       }
       return true;
     };
@@ -81,21 +81,17 @@ export const MixedCongruential: RandomGenerator &
     values: GeneratorValues,
     n?: number,
   ): Promise<number[]> => {
-    if (
-      !this.validateInput(values) ||
-      !this.validHullDobell(values) ||
-      (n && n <= 0)
-    )
+    if (!this.validateInput(values) || (n && n <= 0))
       return Promise.reject('The parameters are not valid');
 
     this.randoms = [];
     let set = new Set();
     let rnd = values.seed;
     while (!set.has(rnd)) {
-      this.randoms.push(rnd / values.m!);
+      this.randoms.push(rnd! / values.m!);
       set.add(rnd);
-      rnd = (values.a! * rnd + values.c!) % values.m!;
-      if (n && this.randoms.length == n) return this.randoms;
+      rnd = (values.a! * rnd! + values.c!) % values.m!;
+      if (n && this.randoms.length === n) return this.randoms;
     }
     return this.randoms;
   };
@@ -113,7 +109,7 @@ export const MixedCongruential: RandomGenerator &
       return Promise.reject(
         'To validate the randoms you need to generate them first',
       );
-    return type == 'CS'
+    return type === 'CS'
       ? ChiSquare.validate(this.randoms.sort(), alpha)
       : KolmogorovSmirnov.validate(this.randoms.sort(), alpha);
   };

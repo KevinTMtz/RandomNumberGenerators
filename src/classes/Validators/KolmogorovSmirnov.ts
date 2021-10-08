@@ -47,7 +47,7 @@ export const KolmogorovSmirnov: Validator = class KolmogorovSmirnov {
       const cdf_empirical = i / n;
       const deviation_plus = Math.abs(cdf_empirical - cdf);
       const deviation_minus =
-        i != 1 ? Math.abs(cdf - this.table[i - 2].cdf_empirical) : cdf;
+        i !== 1 ? Math.abs(cdf - this.table[i - 2].cdf_empirical) : cdf;
 
       const cell: KolmogorovSmirnovCell = {
         cdf: cdf,
