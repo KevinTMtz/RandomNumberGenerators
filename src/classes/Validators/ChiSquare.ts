@@ -1,15 +1,18 @@
-import { ChiSquareData, ChiSquareCell } from '../Interfaces/ChiSquareData';
-import { Validator } from '../Interfaces/Validator';
+import {
+  ChiSquareData,
+  ChiSquareCell,
+} from '../../Interfaces/Validators/ChiSquareData';
+import { Validator } from '../../Interfaces/Validators/Validator';
 
-export class ChiSquare implements Validator {
-  public range!: number;
-  private k!: number;
-  private classes!: number;
-  private table!: ChiSquareCell[];
-  private X0!: number;
-  private X1!: number;
+export const ChiSquare: Validator = class ChiSquare {
+  public static range: number;
+  private static k: number;
+  private static classes: number;
+  private static table: ChiSquareCell[];
+  private static X0: number;
+  private static X1: number;
 
-  public validate = async (
+  public static validate = async (
     randoms: number[],
     alpha: number,
   ): Promise<ChiSquareData> => {
@@ -38,7 +41,7 @@ export class ChiSquare implements Validator {
     return data;
   };
 
-  private createTable = (randoms: number[]) => {
+  private static createTable = (randoms: number[]) => {
     let i = 0;
     let j = 0;
     this.X0 = 0;
@@ -77,9 +80,9 @@ export class ChiSquare implements Validator {
     this.k = this.table.length;
   };
 
-  private getTheoreticalValue = (alpha: number) => {
+  private static getTheoreticalValue = (alpha: number) => {
     const v = this.k - 1;
     //TODO: Get value from tables with v and alpha
     this.X1 = Number.MAX_SAFE_INTEGER;
   };
-}
+};
