@@ -29,7 +29,14 @@ const RandomsList = (props: RandomsListProps) => {
 
     return (
       <ListItem style={style} key={index} component='div' disablePadding>
-        <ListItemButton style={{ height: `${rowHeight}px` }}>
+        <ListItemButton
+          style={{ height: `${rowHeight}px` }}
+          onClick={() => {
+            navigator.clipboard.writeText(
+              props.numsList[index].toString(),
+            );
+          }}
+        >
           <ListItemText primary={props.numsList[index]} />
         </ListItemButton>
       </ListItem>
