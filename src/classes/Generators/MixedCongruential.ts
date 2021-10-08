@@ -1,14 +1,18 @@
 import { ChiSquareData } from '../../Interfaces/Validators/ChiSquareData';
 import { KolmogorovSmirnovData } from '../../Interfaces/Validators/KolmogorovSmirnovData';
-import { RandomGenerator } from '../../Interfaces/Generators/RandomGenerator';
+import {
+  RandomGenerator,
+  RandomValidator,
+} from '../../Interfaces/Generators/RandomGenerator';
 import { ChiSquare } from '../Validators/ChiSquare';
 import { KolmogorovSmirnov } from '../Validators/KolmogorovSmirnov';
 import { GeneratorValues } from '../../Interfaces/components/types';
 
-export class MixedCongruential implements RandomGenerator {
-  private randoms!: number[];
+export const MixedCongruential: RandomGenerator &
+  RandomValidator = class MixedCongruential {
+  private static randoms: number[];
 
-  private validateInput = (values: GeneratorValues) => {
+  private static validateInput = (values: GeneratorValues) => {
     return (
       values &&
       values.seed &&
@@ -22,7 +26,7 @@ export class MixedCongruential implements RandomGenerator {
     );
   };
 
-  private validHullDobell = (values: GeneratorValues): boolean => {
+  private static validHullDobell = (values: GeneratorValues): boolean => {
     const RelativePrimes = (c: number, m: number): boolean => {
       let i = 2;
       let limit = Math.min(c, m);
@@ -73,7 +77,7 @@ export class MixedCongruential implements RandomGenerator {
     );
   };
 
-  public generateRandoms = async (
+  public static generateRandoms = async (
     values: GeneratorValues,
     n?: number,
   ): Promise<number[]> => {
@@ -96,12 +100,12 @@ export class MixedCongruential implements RandomGenerator {
     return this.randoms;
   };
 
-  public getRandoms = (): number[] => {
+  public static getRandoms = (): number[] => {
     if (!this.randoms) return [];
     return this.randoms;
   };
 
-  public validate = async (
+  public static validate = async (
     type: 'CS' | 'KS',
     alpha: number,
   ): Promise<ChiSquareData | KolmogorovSmirnovData> => {
@@ -112,4 +116,19 @@ export class MixedCongruential implements RandomGenerator {
     const validator = type == 'CS' ? new ChiSquare() : new KolmogorovSmirnov();
     return validator.validate(this.randoms.sort(), alpha);
   };
-}
+};
+
+const input: GeneratorValues = {
+  seed: 4,
+  a: 5,
+  c: 7,
+  m: 8,
+};
+
+MixedCongruential.generateRandoms(input).then(
+  (randoms) => {
+    console.log(randoms);
+    MixedCongruential.validate('KS', 0).then((data) => console.log(data));
+  },
+  (error) => console.log(error),
+);

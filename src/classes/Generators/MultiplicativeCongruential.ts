@@ -1,14 +1,18 @@
 import { ChiSquareData } from '../../Interfaces/Validators/ChiSquareData';
 import { KolmogorovSmirnovData } from '../../Interfaces/Validators/KolmogorovSmirnovData';
-import { RandomGenerator } from '../../Interfaces/Generators/RandomGenerator';
+import {
+  RandomGenerator,
+  RandomValidator,
+} from '../../Interfaces/Generators/RandomGenerator';
 import { ChiSquare } from '../Validators/ChiSquare';
 import { KolmogorovSmirnov } from '../Validators/KolmogorovSmirnov';
 import { GeneratorValues } from '../../Interfaces/components/types';
 
-export class MultiplicativeCongruential implements RandomGenerator {
-  private randoms!: number[];
+export const MultiplicativeCongruential: RandomGenerator &
+  RandomValidator = class MultiplicativeCongruential {
+  private static randoms: number[];
 
-  private validateInput = (values: GeneratorValues) => {
+  private static validateInput = (values: GeneratorValues) => {
     return (
       values &&
       values.seed &&
@@ -23,7 +27,7 @@ export class MultiplicativeCongruential implements RandomGenerator {
     );
   };
 
-  public generateRandoms = async (
+  public static generateRandoms = async (
     values: GeneratorValues,
     n?: number,
   ): Promise<number[]> => {
@@ -42,12 +46,12 @@ export class MultiplicativeCongruential implements RandomGenerator {
     return this.randoms;
   };
 
-  public getRandoms = (): number[] => {
+  public static getRandoms = (): number[] => {
     if (!this.randoms) return [];
     return this.randoms;
   };
 
-  public validate = async (
+  public static validate = async (
     type: 'CS' | 'KS',
     alpha: number,
   ): Promise<ChiSquareData | KolmogorovSmirnovData> => {
@@ -58,4 +62,10 @@ export class MultiplicativeCongruential implements RandomGenerator {
     const validator = type == 'CS' ? new ChiSquare() : new KolmogorovSmirnov();
     return validator.validate(this.randoms.sort(), alpha);
   };
-}
+};
+
+const input: GeneratorValues = {
+  seed: 117,
+  a: 43,
+  m: 1000,
+};

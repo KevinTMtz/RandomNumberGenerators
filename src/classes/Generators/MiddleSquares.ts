@@ -1,10 +1,10 @@
 import { GeneratorValues } from '../../Interfaces/components/types';
 import { RandomGenerator } from '../../Interfaces/Generators/RandomGenerator';
 
-export class MiddleSquares implements RandomGenerator {
-  private randoms!: number[];
+export const MiddleSquares: RandomGenerator = class MiddleSquares {
+  private static randoms: number[];
 
-  private validateInput = (values: GeneratorValues) => {
+  private static validateInput = (values: GeneratorValues) => {
     return (
       values &&
       values.seed &&
@@ -15,7 +15,7 @@ export class MiddleSquares implements RandomGenerator {
     );
   };
 
-  public generateRandoms = async (
+  public static generateRandoms = async (
     values: GeneratorValues,
     n?: number,
   ): Promise<number[]> => {
@@ -34,14 +34,22 @@ export class MiddleSquares implements RandomGenerator {
     return this.randoms;
   };
 
-  public getRandoms = (): number[] => {
+  public static getRandoms = (): number[] => {
     if (!this.randoms) return [];
     return this.randoms;
   };
 
-  private getNextRandom = (seed: number): number => {
+  private static getNextRandom = (seed: number): number => {
     let square: String = '' + Math.pow(seed, 2);
     while (square.length < 8) square = '0' + square;
     return Number(square.substr(2, 4));
   };
-}
+};
+
+const input: GeneratorValues = {
+  seed: 3547,
+};
+
+MiddleSquares.generateRandoms(input).then((randoms) =>
+  console.log(MiddleSquares.getRandoms()),
+);

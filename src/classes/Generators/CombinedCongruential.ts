@@ -2,47 +2,49 @@ import { GeneratorValues } from '../../Interfaces/components/types';
 import { RandomGenerator } from '../../Interfaces/Generators/RandomGenerator';
 import { MultiplicativeCongruential } from './MultiplicativeCongruential';
 
-export class CombinedCongruential implements RandomGenerator {
-  private randoms!: number[];
+export const CombinedCongruential: RandomGenerator = class CombinedCongruential {
+  private static randoms: number[];
 
-  private validateInput = (values: GeneratorValues[]) => {
+  private static validateInput = (values: GeneratorValues[]) => {
     if (!values || values.length == 0) return false;
-    values.forEach((val) => {
+    for (const val of values) {
       if (
         !val ||
         !val.seed ||
         val.seed <= 0 ||
         !val.a ||
         val.a <= 0 ||
-        val.c ||
+        val.c !== undefined ||
         !val.m ||
         val.m <= 0
-      )
+      ) {
         return false;
-    });
+      }
+    }
     return true;
   };
 
-  public generateRandoms = async (
+  public static generateRandoms = async (
     values: GeneratorValues[],
     n?: number,
   ): Promise<number[]> => {
-    if (values.length < 2 || !this.validateInput(values) || (n && n <= 0))
+    if (values.length < 2 || !this.validateInput(values) || (n && n <= 0)) {
       return Promise.reject('The parameters are not valid');
-
+    }
     this.randoms = [];
     const k = values.length;
     const gen_rnds: number[][] = [];
     for (let i = 0; i < k; i++) {
-      const gen = new MultiplicativeCongruential();
-      await gen.generateRandoms(values[i]).then(
+      await MultiplicativeCongruential.generateRandoms(values[i]).then(
         (rnds) => {
           rnds = rnds.map((rnd) => {
             return rnd * values[i].m!;
           });
           gen_rnds.push(rnds);
         },
-        (error) => console.log(error),
+        (error) => {
+          return Promise.reject(error);
+        },
       );
     }
 
@@ -63,7 +65,7 @@ export class CombinedCongruential implements RandomGenerator {
     return this.randoms;
   };
 
-  private getNextRandom = (
+  private static getNextRandom = (
     gen_rnds: number[][],
     col: number,
     mod: number,
@@ -78,8 +80,18 @@ export class CombinedCongruential implements RandomGenerator {
     return rnd >= 0 ? rnd % mod : (rnd % mod) + mod;
   };
 
-  public getRandoms = (): number[] => {
+  public static getRandoms = (): number[] => {
     if (!this.randoms) return [];
     return this.randoms;
   };
-}
+};
+
+const input: GeneratorValues[] = [
+  { seed: 1, a: 3, m: 5 },
+  { seed: 3, a: 5, m: 7 },
+];
+
+CombinedCongruential.generateRandoms(input).then(
+  (randoms) => console.log(randoms),
+  (error) => console.log(error),
+);
