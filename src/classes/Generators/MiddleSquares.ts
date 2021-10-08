@@ -26,10 +26,10 @@ export const MiddleSquares: RandomGenerator = class MiddleSquares {
     let set = new Set();
     let rnd = values.seed;
     while (!set.has(rnd)) {
-      this.randoms.push(rnd / 10000);
+      this.randoms.push(rnd! / 10000);
       set.add(rnd);
-      rnd = this.getNextRandom(rnd);
-      if (n && this.randoms.length == n) return this.randoms;
+      rnd = this.getNextRandom(rnd!);
+      if (n && this.randoms.length === n) return this.randoms;
     }
     return this.randoms;
   };

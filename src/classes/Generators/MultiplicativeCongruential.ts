@@ -38,10 +38,10 @@ export const MultiplicativeCongruential: RandomGenerator &
     let set = new Set();
     let rnd = values.seed;
     while (!set.has(rnd)) {
-      this.randoms.push(rnd / values.m!);
+      this.randoms.push(rnd! / values.m!);
       set.add(rnd);
-      rnd = (values.a! * rnd) % values.m!;
-      if (n && this.randoms.length == n) return this.randoms;
+      rnd = (values.a! * rnd!) % values.m!;
+      if (n && this.randoms.length === n) return this.randoms;
     }
     return this.randoms;
   };
@@ -59,7 +59,7 @@ export const MultiplicativeCongruential: RandomGenerator &
       return Promise.reject(
         'To validate the randoms you need to generate them first',
       );
-    return type == 'CS'
+    return type === 'CS'
       ? ChiSquare.validate(this.randoms.sort(), alpha)
       : KolmogorovSmirnov.validate(this.randoms.sort(), alpha);
   };
