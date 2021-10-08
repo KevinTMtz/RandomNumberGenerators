@@ -17,6 +17,7 @@ import {
 import InputRNG from '../components/InputRNG';
 import { RNGOptions } from '../enums/RNGOptions';
 import { InputValues } from '../Interfaces/components/types';
+import RandomsList from '../components/RandomsList';
 
 const rootDivStyle = css({
   margin: '32px 24px',
@@ -208,6 +209,11 @@ const Layout = () => {
         </form>
 
         <br />
+
+        <h1>Random numbers generated</h1>
+        <RandomsList
+          numsList={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]}
+        />
       </div>
     </div>
   );
