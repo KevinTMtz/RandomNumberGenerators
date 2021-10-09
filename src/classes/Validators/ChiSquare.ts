@@ -28,6 +28,11 @@ export const ChiSquare: Validator = class ChiSquare {
     this.k = Math.floor(1 + 3.322 * Math.log10(randoms.length));
     this.classes = 1 / this.k;
     this.createTable(randoms);
+    if (this.k === 1) {
+      return Promise.reject(
+        'The randoms are not enough to validate the distribution',
+      );
+    }
     this.getTheoreticalValue(alpha);
 
     const data: ChiSquareData = {
