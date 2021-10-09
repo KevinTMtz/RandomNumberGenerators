@@ -17,28 +17,23 @@ import {
 import InputRNG from '../components/InputRNG';
 import RandomsList from '../components/RandomsList';
 import { RNGOptions } from '../enums/RNGOptions';
-import { GeneratorValues, InputValues } from '../Interfaces/data/types';
+import { InputValues } from '../Interfaces/data/types';
 import { convertInputToValues } from '../utils/convertInputToValues';
 import { LinearCongruential } from '../classes/Generators/LinearCongruential';
 import { CombinedCongruential } from '../classes/Generators/CombinedCongruential';
 import { MixedCongruential } from '../classes/Generators/MixedCongruential';
 import { MiddleSquares } from '../classes/Generators/MiddleSquares';
 import { MultiplicativeCongruential } from '../classes/Generators/MultiplicativeCongruential';
+import ValidationTable from '../components/ValidationTable';
+import { divStyleColumns, divStyleRows } from '../styles/styles';
+import { KolmogorovSmirnovData } from '../Interfaces/Validators/KolmogorovSmirnovData';
+import { ChiSquareData } from '../Interfaces/Validators/ChiSquareData';
 
 const rootDivStyle = css({
   margin: '32px 24px',
   '@media (max-width: 600px)': {
     margin: '24px 16px',
   },
-  '& > *': {
-    width: '100%',
-  },
-});
-
-const formStyle = css({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '16px',
   '& > *': {
     width: '100%',
   },
@@ -57,6 +52,10 @@ const Layout = () => {
   const [inputNotComplete, setInputNotComplete] = useState(true);
 
   const [randomsList, setRandomsList] = useState<number[]>([]);
+  const [validationData, setValidationData] = useState<
+    KolmogorovSmirnovData | ChiSquareData
+  >({} as any);
+  const [alphaStr, setAlphaStr] = useState('');
 
   let requiredByOption: { [key: string]: string[] } = {};
   requiredByOption[RNGOptions.MiddleSquares] = ['seed'];
@@ -123,66 +122,62 @@ const Layout = () => {
     setInputNotComplete(!check);
   };
 
+  const getCurrentRNG = () => {
+    if (optionRNG === RNGOptions.MiddleSquares) return MiddleSquares;
+    else if (optionRNG === RNGOptions.LinearCongruential)
+      return LinearCongruential;
+    else if (optionRNG === RNGOptions.MixedCongruential)
+      return MixedCongruential;
+    else if (optionRNG === RNGOptions.MultiplicativeCongruential)
+      return MultiplicativeCongruential;
+    else return CombinedCongruential;
+  };
+
+  const handleChangeAlpha = (value: string) => {
+    if (isNaN(Number(value))) return;
+
+    setAlphaStr(value);
+  };
+
   const generateRandoms = async () => {
     const numOfRandomsValue =
       numOfRandoms === '' ? undefined : Number(numOfRandoms);
 
-    if (optionRNG === RNGOptions.CombinedCongruential) {
-      await CombinedCongruential.generateRandoms(
-        convertInputToValues(inputValues),
-        numOfRandomsValue,
-      ).then(
+    let valuesObj =
+      optionRNG === RNGOptions.CombinedCongruential
+        ? convertInputToValues(inputValues)
+        : convertInputToValues(inputValues)[0];
+
+    await getCurrentRNG()
+      .generateRandoms(valuesObj, numOfRandomsValue)
+      .then(
         (randoms) => {
           setRandomsList(randoms);
         },
         (error) => console.log(error),
       );
-    } else {
-      const valuesObj: GeneratorValues = convertInputToValues(inputValues)[0];
+  };
 
-      if (optionRNG === RNGOptions.MiddleSquares) {
-        await MiddleSquares.generateRandoms(valuesObj, numOfRandomsValue).then(
-          (randoms) => {
-            setRandomsList(randoms);
-          },
-          (error) => console.log(error),
-        );
-      } else if (optionRNG === RNGOptions.LinearCongruential) {
-        await LinearCongruential.generateRandoms(
-          valuesObj,
-          numOfRandomsValue,
-        ).then(
-          (randoms) => {
-            setRandomsList(randoms);
-          },
-          (error) => console.log(error),
-        );
-      } else if (optionRNG === RNGOptions.MixedCongruential) {
-        await MixedCongruential.generateRandoms(
-          valuesObj,
-          numOfRandomsValue,
-        ).then(
-          (randoms) => {
-            setRandomsList(randoms);
-          },
-          (error) => console.log(error),
-        );
-      } else if (optionRNG === RNGOptions.MultiplicativeCongruential) {
-        await MultiplicativeCongruential.generateRandoms(
-          valuesObj,
-          numOfRandomsValue,
-        ).then(
-          (randoms) => {
-            setRandomsList(randoms);
-          },
-          (error) => console.log(error),
-        );
-      }
-    }
+  const makeValidation = (validationType: string, alpha: number) => {
+    (
+      getCurrentRNG() as
+        | typeof LinearCongruential
+        | typeof MultiplicativeCongruential
+        | typeof MixedCongruential
+    )
+      .validate(validationType as 'CS' | 'KS', alpha)
+      .then(
+        (data) => {
+          console.log(data);
+          setValidationData(data);
+        },
+        (error) => console.log(error),
+      );
   };
 
   const clean = () => {
     setRandomsList([]);
+    setValidationData({} as any);
   };
 
   return (
@@ -197,7 +192,7 @@ const Layout = () => {
         </AppBar>
       </header>
       <div css={rootDivStyle}>
-        <form css={formStyle}>
+        <form css={divStyleRows}>
           <FormControl fullWidth>
             <InputLabel>Random Number Generator</InputLabel>
             <Select
@@ -293,6 +288,43 @@ const Layout = () => {
               Total randoms generated: <strong>{randomsList.length}</strong>
             </p>
             <RandomsList numsList={randomsList} />
+
+            <br />
+
+            {(optionRNG === RNGOptions.LinearCongruential ||
+              optionRNG === RNGOptions.MultiplicativeCongruential ||
+              optionRNG === RNGOptions.MixedCongruential) && (
+              <>
+                <h1>Validation</h1>
+                <div css={divStyleRows}>
+                  <TextField
+                    label='Alpha'
+                    variant='outlined'
+                    value={alphaStr}
+                    onChange={(event) => handleChangeAlpha(event.target.value)}
+                  />
+
+                  <div css={divStyleColumns}>
+                    <Button
+                      variant='contained'
+                      onClick={() => makeValidation('CS', Number(alphaStr))}
+                    >
+                      Chi Square
+                    </Button>
+                    <Button
+                      variant='contained'
+                      onClick={() => makeValidation('KS', Number(alphaStr))}
+                    >
+                      Kolmogorov Smirnov
+                    </Button>
+                  </div>
+
+                  {validationData.table && (
+                    <ValidationTable data={validationData} />
+                  )}
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
