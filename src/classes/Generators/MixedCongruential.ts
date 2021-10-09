@@ -7,10 +7,15 @@ import {
 import { ChiSquare } from '../Validators/ChiSquare';
 import { KolmogorovSmirnov } from '../Validators/KolmogorovSmirnov';
 import { GeneratorValues } from '../../Interfaces/data/types';
+import { HullDobell } from '../../Interfaces/Validators/HullDobell';
 
-export const MixedCongruential: RandomGenerator &
-  RandomValidator = class MixedCongruential {
+interface IMixedCongruential extends RandomGenerator, RandomValidator {
+  validHullDobell(): HullDobell;
+}
+
+export const MixedCongruential: IMixedCongruential = class MixedCongruential {
   private static randoms: number[];
+  private static values: GeneratorValues;
 
   private static validateInput = (values: GeneratorValues) => {
     return (
@@ -26,28 +31,38 @@ export const MixedCongruential: RandomGenerator &
     );
   };
 
-  private static validHullDobell = (values: GeneratorValues): boolean => {
-    const RelativePrimes = (c: number, m: number): boolean => {
+  public static validHullDobell = (): HullDobell => {
+    let general = true;
+
+    const RelativePrimes = (
+      c: number,
+      m: number,
+    ): { areRelativePrimes: boolean } => {
       let i = 2;
       let limit = Math.min(c, m);
       while (i <= limit) {
-        if (m % i === 0 && c % i === 0) return false;
+        if (m % i === 0 && c % i === 0) {
+          general = false;
+          return { areRelativePrimes: false };
+        }
         i++;
       }
-      return true;
+      return { areRelativePrimes: true };
     };
 
-    const PrimeDivision = (a: number, m: number): boolean => {
-      const getPrimes = (m: number): number[] => {
-        const limit = Math.ceil(Math.sqrt(m));
+    const PrimeDivision = (
+      a: number,
+      m: number,
+    ): { primeDivision: boolean } => {
+      const getPrimes = (m: number, a: number): number[] => {
         var sieve = [],
           i,
           j,
           primes = [];
-        for (i = 2; i <= limit; ++i) {
+        for (i = 2; i < a; ++i) {
           if (!sieve[i]) {
-            primes.push(i);
-            for (j = i << 1; j <= limit; j += i) {
+            if (m % i === 0) primes.push(i);
+            for (j = i << 1; j <= a; j += i) {
               sieve[j] = true;
             }
           }
@@ -55,32 +70,48 @@ export const MixedCongruential: RandomGenerator &
         return primes;
       };
 
-      const primes = getPrimes(m);
-      primes.forEach((prime) => {
-        if (m % prime === 0 && (a - 1) % prime !== 0) return false;
-      });
+      const primes = getPrimes(m, a);
 
-      return true;
-    };
-
-    const FourDivision = (a: number, m: number): boolean => {
-      if (m % 4 === 0) {
-        return (a - 1) % 4 === 0 ? true : false;
+      for (let i = 0; i < primes.length; i++) {
+        if (m % primes[i] === 0 && (a - 1) % primes[i] !== 0) {
+          general = false;
+          return {
+            primeDivision: false,
+          };
+        }
       }
-      return true;
+
+      return {
+        primeDivision: true,
+      };
     };
 
-    return (
-      RelativePrimes(values.c!, values.m!) &&
-      PrimeDivision(values.a!, values.m!) &&
-      FourDivision(values.a!, values.m!)
-    );
+    const FourDivision = (
+      a: number,
+      m: number,
+    ): { mDivision: boolean; aDivision: boolean } => {
+      const mCheck = m % 4 === 0;
+      const aCheck = (a - 1) % 4 === 0;
+
+      general = general && mCheck && aCheck;
+
+      return { mDivision: mCheck, aDivision: aCheck };
+    };
+
+    return {
+      rule1: RelativePrimes(this.values.c!, this.values.m!),
+      rule2: PrimeDivision(this.values.a!, this.values.m!),
+      rule3: FourDivision(this.values.a!, this.values.m!),
+      general: { check: general },
+    };
   };
 
   public static generateRandoms = async (
     values: GeneratorValues,
     n?: number,
   ): Promise<number[]> => {
+    this.values = values;
+
     if (!this.validateInput(values) || (n && n <= 0))
       return Promise.reject('The parameters are not valid');
 

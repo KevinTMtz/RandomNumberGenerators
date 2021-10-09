@@ -28,6 +28,7 @@ import ValidationTable from '../components/ValidationTable';
 import { divStyleColumns, divStyleRows } from '../styles/styles';
 import { KolmogorovSmirnovData } from '../Interfaces/Validators/KolmogorovSmirnovData';
 import { ChiSquareData } from '../Interfaces/Validators/ChiSquareData';
+import { HullDobell } from '../Interfaces/Validators/HullDobell';
 
 const rootDivStyle = css({
   margin: '32px 24px',
@@ -41,6 +42,12 @@ const rootDivStyle = css({
 
 const Layout = () => {
   const emptyObjectValues = { seed: '', a: '', c: '', m: '' };
+  const emptyHullDobell = {
+    rule1: { areRelativePrimes: false },
+    rule2: { primeDivision: false },
+    rule3: { mDivision: false, aDivision: false },
+    general: { check: false },
+  };
 
   const [optionRNG, setOptionRNG] = useState<string>('1');
   const [numOfRandoms, setNumOfRandoms] = useState('');
@@ -51,6 +58,7 @@ const Layout = () => {
 
   const [inputNotComplete, setInputNotComplete] = useState(true);
 
+  const [hullDobell, setHullDobell] = useState<HullDobell>(emptyHullDobell);
   const [randomsList, setRandomsList] = useState<number[]>([]);
   const [validationData, setValidationData] = useState<
     KolmogorovSmirnovData | ChiSquareData
@@ -153,6 +161,10 @@ const Layout = () => {
       .then(
         (randoms) => {
           setRandomsList(randoms);
+
+          if (optionRNG === RNGOptions.MixedCongruential) {
+            setHullDobell(MixedCongruential.validHullDobell());
+          }
         },
         (error) => console.log(error),
       );
@@ -177,6 +189,7 @@ const Layout = () => {
   const clean = () => {
     setRandomsList([]);
     setValidationData({} as any);
+    setHullDobell(emptyHullDobell);
   };
 
   return (
@@ -282,7 +295,40 @@ const Layout = () => {
 
         {randomsList.length > 0 && (
           <>
-            <h1>Random numbers generated</h1>
+            {optionRNG === RNGOptions.MixedCongruential && (
+              <>
+                <h1>Hull–Dobell Theorem</h1>
+                <p>
+                  The generator{' '}
+                  <strong>
+                    {hullDobell.general.check ? 'has' : 'does not have'} full
+                    period
+                  </strong>
+                </p>
+                <ol>
+                  <li>
+                    {inputValues[0].c} and {inputValues[0].m} are{' '}
+                    {hullDobell.rule1.areRelativePrimes ? '' : 'not'} relative
+                    primes
+                  </li>
+                  <li>
+                    All primes that divide {inputValues[0].m},{' '}
+                    {hullDobell.rule2.primeDivision ? '' : 'do not'} divide (
+                    {inputValues[0].a}-1){' '}
+                  </li>
+                  <li>
+                    4{' '}
+                    {hullDobell.rule3.mDivision ? 'divides' : 'does not divide'}{' '}
+                    {inputValues[0].m}, and{' '}
+                    {hullDobell.rule3.aDivision ? 'divides' : 'does not divide'}{' '}
+                    ({inputValues[0].a}-1)
+                  </li>
+                </ol>
+                <br />
+              </>
+            )}
+
+            <h1>Random Numbers Generated</h1>
             <p>
               Total randoms generated: <strong>{randomsList.length}</strong>
             </p>
