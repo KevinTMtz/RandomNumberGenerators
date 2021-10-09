@@ -3,6 +3,7 @@ import {
   KolmogorovSmirnovData,
 } from '../../Interfaces/Validators/KolmogorovSmirnovData';
 import { Validator } from '../../Interfaces/Validators/Validator';
+import { ksDistributionTable } from '../../utils/KolmogorovSmirnovCritical';
 
 export const KolmogorovSmirnov: Validator = class KolmogorovSmirnov {
   private static table: KolmogorovSmirnovCell[];
@@ -15,7 +16,7 @@ export const KolmogorovSmirnov: Validator = class KolmogorovSmirnov {
     randoms: number[],
     alpha: number,
   ): Promise<KolmogorovSmirnovData> => {
-    if (randoms.length < 1) {
+    if (randoms.length < 1 || !(alpha in ksDistributionTable[1])) {
       return Promise.reject(
         'Not enough information provided to make the validation',
       );
@@ -77,7 +78,26 @@ export const KolmogorovSmirnov: Validator = class KolmogorovSmirnov {
 
   private static getTheoreticalValue = (alpha: number) => {
     const n = this.table.length;
-    //TODO: Get value from tables with n and alpha
-    this.deviation_critical = Number.MAX_SAFE_INTEGER;
+    if (n > 50) {
+      switch (alpha) {
+        case 0.2:
+          return 1.07 / Math.sqrt(n);
+        case 0.1:
+          return 1.22 / Math.sqrt(n);
+        case 0.05:
+          return 1.36 / Math.sqrt(n);
+        case 0.02:
+          return 1.52 / Math.sqrt(n);
+        case 0.01:
+          return 1.63 / Math.sqrt(n);
+        case 0.005:
+          return 1.73 / Math.sqrt(n);
+        case 0.002:
+          return 1.85 / Math.sqrt(n);
+        case 0.001:
+          return 1.95 / Math.sqrt(n);
+      }
+    }
+    this.deviation_critical = ksDistributionTable[n][alpha];
   };
 };

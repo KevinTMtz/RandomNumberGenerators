@@ -182,7 +182,10 @@ const Layout = () => {
         (data) => {
           setValidationData(data);
         },
-        (error) => console.log(error),
+        (error) => {
+          console.log(error);
+          setValidationData({} as any);
+        },
       );
   };
 
