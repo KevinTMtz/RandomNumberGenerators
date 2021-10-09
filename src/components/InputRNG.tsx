@@ -51,7 +51,14 @@ const InputRNG = (props: InputRNGProps) => {
           variant='outlined'
           value={props.inputValuesArr[props.index].seed}
           onChange={(event) => handleInputChange('seed', event.target.value)}
-          disabled={props.randomsListLength > 0}
+          InputProps={{
+            readOnly: props.randomsListLength > 0,
+          }}
+          focused={
+            props.randomsListLength > 0
+              ? !(props.randomsListLength > 0)
+              : undefined
+          }
           required
         />
         {props.optionRNG !== RNGOptions.MiddleSquares && (
@@ -61,7 +68,14 @@ const InputRNG = (props: InputRNGProps) => {
               variant='outlined'
               value={props.inputValuesArr[props.index].a}
               onChange={(event) => handleInputChange('a', event.target.value)}
-              disabled={props.randomsListLength > 0}
+              InputProps={{
+                readOnly: props.randomsListLength > 0,
+              }}
+              focused={
+                props.randomsListLength > 0
+                  ? !(props.randomsListLength > 0)
+                  : undefined
+              }
               required
             />
             {props.optionRNG !== RNGOptions.MultiplicativeCongruential &&
@@ -73,7 +87,14 @@ const InputRNG = (props: InputRNGProps) => {
                   onChange={(event) =>
                     handleInputChange('c', event.target.value)
                   }
-                  disabled={props.randomsListLength > 0}
+                  InputProps={{
+                    readOnly: props.randomsListLength > 0,
+                  }}
+                  focused={
+                    props.randomsListLength > 0
+                      ? !(props.randomsListLength > 0)
+                      : undefined
+                  }
                   required
                 />
               )}
@@ -82,7 +103,14 @@ const InputRNG = (props: InputRNGProps) => {
               variant='outlined'
               value={props.inputValuesArr[props.index].m}
               onChange={(event) => handleInputChange('m', event.target.value)}
-              disabled={props.randomsListLength > 0}
+              InputProps={{
+                readOnly: props.randomsListLength > 0,
+              }}
+              focused={
+                props.randomsListLength > 0
+                  ? !(props.randomsListLength > 0)
+                  : undefined
+              }
               required
             />
           </>

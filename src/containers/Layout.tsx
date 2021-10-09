@@ -205,13 +205,20 @@ const Layout = () => {
       </header>
       <div css={rootDivStyle}>
         <form css={divStyleRows}>
-          <FormControl fullWidth>
+          <FormControl
+            fullWidth
+            focused={
+              randomsList.length > 0 ? !(randomsList.length > 0) : undefined
+            }
+          >
             <InputLabel>Random Number Generator</InputLabel>
             <Select
               value={optionRNG}
               label='Random Number Generator'
               onChange={handleRNGChange}
-              disabled={randomsList.length > 0}
+              inputProps={{
+                readOnly: randomsList.length > 0,
+              }}
             >
               <MenuItem value={RNGOptions.MiddleSquares}>
                 Middle Squares
@@ -238,7 +245,12 @@ const Layout = () => {
             variant='outlined'
             value={numOfRandoms}
             onChange={(event) => handleChangeNumOfRandom(event.target.value)}
-            disabled={randomsList.length > 0}
+            InputProps={{
+              readOnly: randomsList.length > 0,
+            }}
+            focused={
+              randomsList.length > 0 ? !(randomsList.length > 0) : undefined
+            }
           />
 
           {RNGOptions.CombinedCongruential === optionRNG && (
@@ -249,7 +261,12 @@ const Layout = () => {
               onChange={(event) =>
                 handleChangeGenerators(event.target.value, optionRNG)
               }
-              disabled={randomsList.length > 0}
+              InputProps={{
+                readOnly: randomsList.length > 0,
+              }}
+              focused={
+                randomsList.length > 0 ? !(randomsList.length > 0) : undefined
+              }
             />
           )}
 
@@ -307,21 +324,26 @@ const Layout = () => {
                 </p>
                 <ol>
                   <li>
-                    {inputValues[0].c} and {inputValues[0].m} are{' '}
+                    <strong>{inputValues[0].c}</strong> and{' '}
+                    <strong>{inputValues[0].m}</strong> are{' '}
                     {hullDobell.rule1.areRelativePrimes ? '' : 'not'} relative
                     primes
                   </li>
                   <li>
-                    All primes that divide {inputValues[0].m},{' '}
+                    All primes that divide <strong>{inputValues[0].m}</strong>,{' '}
                     {hullDobell.rule2.primeDivision ? '' : 'do not'} divide (
-                    {inputValues[0].a}-1){' '}
+                    <strong>{inputValues[0].a}</strong> - 1){' '}
                   </li>
                   <li>
                     4{' '}
-                    {hullDobell.rule3.mDivision ? 'divides' : 'does not divide'}{' '}
-                    {inputValues[0].m}, and{' '}
-                    {hullDobell.rule3.aDivision ? 'divides' : 'does not divide'}{' '}
-                    ({inputValues[0].a}-1)
+                    {hullDobell.rule3.mDivision ? `divides` : 'does not divide'}{' '}
+                    <strong>{inputValues[0].m}</strong>,{' '}
+                    {hullDobell.rule3.mDivision
+                      ? hullDobell.rule3.aDivision
+                        ? `so 4 divides`
+                        : `but 4 does not divide`
+                      : 'so it does not have to divide'}{' '}
+                    (<strong>{inputValues[0].a}</strong> - 1)
                   </li>
                 </ol>
                 <br />

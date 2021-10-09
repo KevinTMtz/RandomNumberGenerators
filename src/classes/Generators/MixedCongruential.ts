@@ -54,15 +54,15 @@ export const MixedCongruential: IMixedCongruential = class MixedCongruential {
       a: number,
       m: number,
     ): { primeDivision: boolean } => {
-      const getPrimes = (m: number, a: number): number[] => {
+      const getPrimes = (m: number): number[] => {
         var sieve = [],
           i,
           j,
           primes = [];
-        for (i = 2; i < a; ++i) {
+        for (i = 2; i <= m; ++i) {
           if (!sieve[i]) {
             if (m % i === 0) primes.push(i);
-            for (j = i << 1; j <= a; j += i) {
+            for (j = i << 1; j <= m; j += i) {
               sieve[j] = true;
             }
           }
@@ -70,10 +70,10 @@ export const MixedCongruential: IMixedCongruential = class MixedCongruential {
         return primes;
       };
 
-      const primes = getPrimes(m, a);
+      const primes = getPrimes(m);
 
-      for (let i = 0; i < primes.length; i++) {
-        if (m % primes[i] === 0 && (a - 1) % primes[i] !== 0) {
+      for (const prime of primes) {
+        if (m % prime === 0 && (a - 1) % prime !== 0) {
           general = false;
           return {
             primeDivision: false,
@@ -93,7 +93,7 @@ export const MixedCongruential: IMixedCongruential = class MixedCongruential {
       const mCheck = m % 4 === 0;
       const aCheck = (a - 1) % 4 === 0;
 
-      general = general && mCheck && aCheck;
+      if (mCheck && !aCheck) general = false;
 
       return { mDivision: mCheck, aDivision: aCheck };
     };
