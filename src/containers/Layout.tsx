@@ -168,7 +168,6 @@ const Layout = () => {
       .validate(validationType as 'CS' | 'KS', alpha)
       .then(
         (data) => {
-          console.log(data);
           setValidationData(data);
         },
         (error) => console.log(error),

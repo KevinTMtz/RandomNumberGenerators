@@ -9,18 +9,13 @@ import {
   TableHead,
   TableRow,
   Button,
+  TextField,
 } from '@mui/material';
 import { CSVLink } from 'react-csv';
 
-import { divStyleRows } from '../styles/styles';
-import {
-  KolmogorovSmirnovCell,
-  KolmogorovSmirnovData,
-} from '../Interfaces/Validators/KolmogorovSmirnovData';
-import {
-  ChiSquareCell,
-  ChiSquareData,
-} from '../Interfaces/Validators/ChiSquareData';
+import { divStyleColumns, divStyleRows } from '../styles/styles';
+import { KolmogorovSmirnovData } from '../Interfaces/Validators/KolmogorovSmirnovData';
+import { ChiSquareData } from '../Interfaces/Validators/ChiSquareData';
 
 const TableStyle = css({
   border: '1px solid #ccc',
@@ -44,11 +39,28 @@ const ValidationTable = (props: ValidationTableProps) => {
     result: 'Result',
   };
 
+  const chiSquareValues: { [key: string]: string } = {
+    X0: 'X0',
+    X1: 'X1',
+    classes: 'Classes',
+    k: 'K',
+    range: 'Range',
+    isValid: 'Valid',
+  };
+
   const kolmogorovSmirnovHeaders = {
     cdf: 'CDF',
     cdf_empirical: 'CDF Empirical',
     deviation_plus: 'Deviation +',
     deviation_minus: 'Deviation -',
+  };
+
+  const kolmogorovValues: { [key: string]: string } = {
+    deviation_max_plus: 'Dmax +',
+    deviation_max_minus: 'Dmax -',
+    deviation_max: 'Dmax',
+    deviation_critical: 'D Critical',
+    isValid: 'Valid',
   };
 
   const isChiSquare = () => {
@@ -64,6 +76,30 @@ const ValidationTable = (props: ValidationTableProps) => {
   return (
     <div css={divStyleRows}>
       <h3>{isChiSquare() ? 'Chi Square' : 'Kolmogorov Smirnov'}</h3>
+
+      <div css={divStyleColumns}>
+        {Object.keys(isChiSquare() ? chiSquareValues : kolmogorovValues).map(
+          (key) => (
+            <TextField
+              key={`chi-square-value-${key}`}
+              label={(isChiSquare() ? chiSquareValues : kolmogorovValues)[key]}
+              variant='outlined'
+              value={(props.data as any)[key]}
+              InputProps={{
+                readOnly: true,
+              }}
+              color={
+                key === 'isValid'
+                  ? (props.data as any)[key]
+                    ? 'success'
+                    : 'error'
+                  : undefined
+              }
+              focused={key === 'isValid'}
+            />
+          ),
+        )}
+      </div>
 
       <TableContainer css={TableStyle} sx={{ maxHeight: 350 }}>
         <Table size='small'>
