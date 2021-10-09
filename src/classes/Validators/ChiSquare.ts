@@ -3,6 +3,7 @@ import {
   ChiSquareCell,
 } from '../../Interfaces/Validators/ChiSquareData';
 import { Validator } from '../../Interfaces/Validators/Validator';
+import { chiSquareDistributionTable } from '../../utils/ChiSquareCritical';
 
 export const ChiSquare: Validator = class ChiSquare {
   public static range: number;
@@ -16,7 +17,7 @@ export const ChiSquare: Validator = class ChiSquare {
     randoms: number[],
     alpha: number,
   ): Promise<ChiSquareData> => {
-    if (randoms.length <= 4) {
+    if (randoms.length <= 4 || !(alpha in chiSquareDistributionTable[1])) {
       return Promise.reject(
         'Not enough information provided to make the validation',
       );
@@ -82,7 +83,6 @@ export const ChiSquare: Validator = class ChiSquare {
 
   private static getTheoreticalValue = (alpha: number) => {
     const v = this.k - 1;
-    //TODO: Get value from tables with v and alpha
-    this.X1 = Number.MAX_SAFE_INTEGER;
+    this.X1 = chiSquareDistributionTable[v][alpha];
   };
 };

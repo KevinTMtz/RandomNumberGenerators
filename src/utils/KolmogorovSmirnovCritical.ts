@@ -1,4 +1,4 @@
-export const chiSquareDistributionTable: {
+export const ksDistributionTable: {
   [index: number]: { [index: number]: number };
 } = {
   1: {

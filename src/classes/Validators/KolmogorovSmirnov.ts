@@ -3,6 +3,7 @@ import {
   KolmogorovSmirnovData,
 } from '../../Interfaces/Validators/KolmogorovSmirnovData';
 import { Validator } from '../../Interfaces/Validators/Validator';
+import { ksDistributionTable } from '../../utils/KolmogorovSmirnovCritical';
 
 export const KolmogorovSmirnov: Validator = class KolmogorovSmirnov {
   private static table: KolmogorovSmirnovCell[];
@@ -15,7 +16,7 @@ export const KolmogorovSmirnov: Validator = class KolmogorovSmirnov {
     randoms: number[],
     alpha: number,
   ): Promise<KolmogorovSmirnovData> => {
-    if (randoms.length < 1) {
+    if (randoms.length < 1 || !(alpha in ksDistributionTable[1])) {
       return Promise.reject(
         'Not enough information provided to make the validation',
       );
@@ -77,7 +78,6 @@ export const KolmogorovSmirnov: Validator = class KolmogorovSmirnov {
 
   private static getTheoreticalValue = (alpha: number) => {
     const n = this.table.length;
-    //TODO: Get value from tables with n and alpha
-    this.deviation_critical = Number.MAX_SAFE_INTEGER;
+    this.deviation_critical = ksDistributionTable[n][alpha];
   };
 };
