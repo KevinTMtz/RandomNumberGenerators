@@ -8,8 +8,11 @@ import { ChiSquare } from '../Validators/ChiSquare';
 import { KolmogorovSmirnov } from '../Validators/KolmogorovSmirnov';
 import { GeneratorValues } from '../../Interfaces/data/types';
 
-export const MultiplicativeCongruential: RandomGenerator &
-  RandomValidator = class MultiplicativeCongruential {
+interface IMultiplicativeCongruential
+  extends RandomGenerator,
+    RandomValidator {}
+
+export const MultiplicativeCongruential: IMultiplicativeCongruential = class MultiplicativeCongruential {
   private static randoms: number[];
 
   private static validateInput = (values: GeneratorValues) => {
