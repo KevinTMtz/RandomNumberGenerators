@@ -29,6 +29,7 @@ import { divStyleColumns, divStyleRows } from '../styles/styles';
 import { KolmogorovSmirnovData } from '../Interfaces/Validators/KolmogorovSmirnovData';
 import { ChiSquareData } from '../Interfaces/Validators/ChiSquareData';
 import { HullDobell } from '../Interfaces/Validators/HullDobell';
+import WarningModal from '../components/WarningModal';
 
 const rootDivStyle = css({
   margin: '32px 24px',
@@ -63,7 +64,10 @@ const Layout = () => {
   const [validationData, setValidationData] = useState<
     KolmogorovSmirnovData | ChiSquareData
   >({} as any);
-  const [alphaStr, setAlphaStr] = useState('');
+  const [alphaStr, setAlphaStr] = useState('0.05');
+  const [openModal, setOpenModal] = useState(false);
+  const [errorTitle, setErrorTitle] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   let requiredByOption: { [key: string]: string[] } = {};
   requiredByOption[RNGOptions.MiddleSquares] = ['seed'];
@@ -166,7 +170,10 @@ const Layout = () => {
             setHullDobell(MixedCongruential.validHullDobell());
           }
         },
-        (error) => console.log(error),
+        (error) => {
+          console.log(error);
+          handleOpen('Error during generation', error);
+        },
       );
   };
 
@@ -185,6 +192,7 @@ const Layout = () => {
         (error) => {
           console.log(error);
           setValidationData({} as any);
+          handleOpen('Error during validation', error);
         },
       );
   };
@@ -193,6 +201,12 @@ const Layout = () => {
     setRandomsList([]);
     setValidationData({} as any);
     setHullDobell(emptyHullDobell);
+  };
+
+  const handleOpen = (title: string, message: string) => {
+    setOpenModal(true);
+    setErrorTitle(title);
+    setErrorMessage(message);
   };
 
   return (
@@ -398,6 +412,12 @@ const Layout = () => {
           </>
         )}
       </div>
+      <WarningModal
+        open={openModal}
+        setOpen={setOpenModal}
+        title={errorTitle}
+        message={errorMessage}
+      />
     </div>
   );
 };
