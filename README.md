@@ -34,7 +34,7 @@ $ yarn start
 - Backend
   ![Node.js](https://img.shields.io/badge/-Node.js-black?style=flat-square&logo=nodedotjs)
 
-## Autores
+## Authors
 
 <table>
   <tr>
