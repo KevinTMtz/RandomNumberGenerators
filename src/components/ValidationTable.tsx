@@ -56,8 +56,8 @@ const ValidationTable = (props: ValidationTableProps) => {
   };
 
   const kolmogorovValues: { [key: string]: string } = {
-    deviation_max_plus: 'Dmax +',
-    deviation_max_minus: 'Dmax -',
+    deviation_max_plus: 'D +',
+    deviation_max_minus: 'D -',
     deviation_max: 'Dmax',
     deviation_critical: 'D Critical',
     isValid: 'Valid',
@@ -137,7 +137,7 @@ const ValidationTable = (props: ValidationTableProps) => {
 
       <CSVLink
         data={props.data.table}
-        filename='randoms.csv'
+        filename='validation.csv'
         style={{ textDecoration: 'none' }}
       >
         <Button variant='outlined' fullWidth>

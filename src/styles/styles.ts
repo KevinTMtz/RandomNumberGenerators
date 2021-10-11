@@ -16,4 +16,7 @@ export const divStyleColumns = css({
   '& > *': {
     width: '100%',
   },
+  '@media (max-width: 550px)': {
+    flexDirection: 'column',
+  },
 });
