@@ -54,7 +54,7 @@ export const CombinedCongruential: RandomGenerator = class CombinedCongruential 
       period *= val.m! - 1;
       mod = Math.max(mod, val.m!);
     });
-    period /= 2;
+    period /= Math.pow(2, k - 1);
     let i = 0;
     while (i < period) {
       let rnd = this.getNextRandom(gen_rnds, i, mod, k);
