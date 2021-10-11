@@ -392,6 +392,7 @@ const Layout = () => {
                     <Button
                       variant='contained'
                       onClick={() => makeValidation('CS', Number(alphaStr))}
+                      disabled={randomsList.length < 10}
                     >
                       Chi Square
                     </Button>

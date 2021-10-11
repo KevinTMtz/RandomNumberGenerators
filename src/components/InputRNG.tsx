@@ -4,11 +4,10 @@ import { css } from '@mui/styled-engine';
 import { TextField } from '@mui/material';
 import { InputValues } from '../Interfaces/data/types';
 import { RNGOptions } from '../enums/RNGOptions';
+import { divStyleColumns } from '../styles/styles';
 
 const rngInputsStyle = css({
-  display: 'flex',
-  width: '100%',
-  gap: '16px',
+  ...divStyleColumns,
   '& > *': {
     flexGrow: 1,
   },
@@ -45,7 +44,7 @@ const InputRNG = (props: InputRNGProps) => {
 
   return (
     <div>
-      <div css={rngInputsStyle}>
+      <div css={[rngInputsStyle]}>
         <TextField
           label='Seed'
           variant='outlined'
