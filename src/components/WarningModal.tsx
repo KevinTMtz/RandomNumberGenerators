@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { css } from '@mui/styled-engine';
-import { Modal, Typography } from '@mui/material';
+import { Backdrop, Modal, Typography } from '@mui/material';
 
 const modalStyle = css({
   position: 'absolute',
@@ -17,6 +17,9 @@ const modalStyle = css({
   '&:hover': {
     border: '1px solid black',
   },
+  '@media (max-width: 550px)': {
+    width: '80%',
+  },
 });
 
 interface ModalProps {
@@ -29,16 +32,18 @@ interface ModalProps {
 const WarningModal = (props: ModalProps) => {
   const handleClose = () => props.setOpen(false);
   return (
-    <Modal open={props.open} onClose={handleClose}>
-      <div css={modalStyle}>
-        <Typography id='modal-modal-title' variant='h6' component='h2'>
-          {props.title}
-        </Typography>
-        <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-          {props.message}
-        </Typography>
-      </div>
-    </Modal>
+    <Backdrop open={props.open} onClick={handleClose}>
+      <Modal open={props.open} onClose={handleClose}>
+        <div css={modalStyle}>
+          <Typography id='modal-modal-title' variant='h6' component='h2'>
+            {props.title}
+          </Typography>
+          <Typography id='modal-modal-description' sx={{ mt: 2 }}>
+            {props.message}
+          </Typography>
+        </div>
+      </Modal>
+    </Backdrop>
   );
 };
 
