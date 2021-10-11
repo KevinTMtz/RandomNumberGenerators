@@ -1,46 +1,53 @@
-# Getting Started with Create React App
+# Random Numbers Generator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![GitHub top language](https://img.shields.io/github/languages/top/KevinTMtz/RandomNumberGenerators)
+![Lines of code](https://tokei.rs/b1/github/KevinTMtz/RandomNumberGenerators?category=code)
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+1.- Download source code
 
-### `yarn start`
+```
+$ git clone https://github.com/KevinTMtz/RandomNumberGenerators.git
+$ cd RandomNumberGenerators
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2.- Install Node.js dependencies
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```
+$ yarn install
+```
 
-### `yarn test`
+3.- To execute the development server:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Execute developer version
 
-### `yarn build`
+```
+$ yarn start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Technologies
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Frontend
+  ![React](https://img.shields.io/badge/-React-black?style=flat-square&logo=react)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Backend
+  ![Node.js](https://img.shields.io/badge/-Node.js-black?style=flat-square&logo=nodedotjs)
 
-### `yarn eject`
+## Creadores
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/KevinTMtz"><img src="https://avatars.githubusercontent.com/u/44516784" width="100px;" alt=""/><br /><sub><b>Kevin Torres Martínez</b></sub></a><br />A01656257</td>
+    <td align="center"><a href="https://github.com/SebasRod23"><img src="https://avatars.githubusercontent.com/u/42384931" width="100px;" alt=""/><br /><sub><b>Sebastián Rodríguez Galarza</b></sub></a><br />A01656159</td>
+    <td align="center"><a href="https://github.com/SebasRod23"><img src="https://avatars.githubusercontent.com/u/15371718?v=4" width="100px;" alt=""/><br /><sub><b>Víctor Antonio Godínez Rodríguez</b></sub></a><br />A01339529</td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/Raul5412"><img src="https://avatars.githubusercontent.com/u/44035290?v=4" width="100px;" alt=""/><br /><sub><b>Raúl González Cardona</b></sub></a><br />A01654995</td>
+    <td align="center"><a href="https://github.com/davidpmu97"><img src="https://avatars.githubusercontent.com/u/22080116?v=4" width="100px;" alt=""/><br /><sub><b>David Pastor Martinez Ulloa</b></sub></a><br />A01208025</td>
+  </tr>
+</table>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## License
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Code published under [MIT License](https://github.com/kevintmtz/MedCLIP/blob/main/LICENSE).
