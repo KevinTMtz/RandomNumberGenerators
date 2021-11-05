@@ -1,4 +1,8 @@
-export interface InputValues {
+interface objectWithKeyStr {
+  [key: string]: string;
+}
+
+export interface InputValues extends objectWithKeyStr {
   seed: string;
   a: string;
   c: string;
