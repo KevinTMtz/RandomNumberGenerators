@@ -63,18 +63,19 @@ const Layout = () => {
   const [randomsList, setRandomsList] = useState<number[]>([]);
   const [validationData, setValidationData] = useState<
     KolmogorovSmirnovData | ChiSquareData
-  >({} as any);
+  >({} as KolmogorovSmirnovData | ChiSquareData);
   const [alphaStr, setAlphaStr] = useState('0.05');
   const [openModal, setOpenModal] = useState(false);
   const [errorTitle, setErrorTitle] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  let requiredByOption: { [key: string]: string[] } = {};
-  requiredByOption[RNGOptions.MiddleSquares] = ['seed'];
-  requiredByOption[RNGOptions.LinearCongruential] = ['seed', 'a', 'c', 'm'];
-  requiredByOption[RNGOptions.MixedCongruential] = ['seed', 'a', 'c', 'm'];
-  requiredByOption[RNGOptions.CombinedCongruential] = ['seed', 'a', 'm'];
-  requiredByOption[RNGOptions.MultiplicativeCongruential] = ['seed', 'a', 'm'];
+  let requiredByOption: { [key: string]: string[] } = {
+    [RNGOptions.MiddleSquares]: ['seed'],
+    [RNGOptions.LinearCongruential]: ['seed', 'a', 'c', 'm'],
+    [RNGOptions.MixedCongruential]: ['seed', 'a', 'c', 'm'],
+    [RNGOptions.CombinedCongruential]: ['seed', 'a', 'm'],
+    [RNGOptions.MultiplicativeCongruential]: ['seed', 'a', 'm'],
+  };
 
   const handleRNGChange = (event: SelectChangeEvent) => {
     const option = event.target.value;
@@ -127,7 +128,7 @@ const Layout = () => {
 
     inputVals.forEach((values) =>
       requiredByOption[optionRNG].forEach(
-        (key) => (check = check && (values as any)[key] !== ''),
+        (key) => (check = check && (values as InputValues)[key] !== ''),
       ),
     );
 
@@ -191,7 +192,9 @@ const Layout = () => {
         },
         (error) => {
           console.log(error);
-          setValidationData({} as any);
+          setValidationData(
+            {} as React.SetStateAction<KolmogorovSmirnovData | ChiSquareData>,
+          );
           handleOpen('Error during validation', error);
         },
       );
@@ -199,7 +202,9 @@ const Layout = () => {
 
   const clean = () => {
     setRandomsList([]);
-    setValidationData({} as any);
+    setValidationData(
+      {} as React.SetStateAction<KolmogorovSmirnovData | ChiSquareData>,
+    );
     setHullDobell(emptyHullDobell);
   };
 
@@ -297,9 +302,9 @@ const Layout = () => {
                 >
               }
               index={index}
-              optionRNG={optionRNG}
               validateCompleteInput={validateCompleteInput}
               randomsListLength={randomsList.length}
+              requiredByOption={requiredByOption[optionRNG]}
             />
           ))}
 
@@ -375,9 +380,11 @@ const Layout = () => {
 
             <br />
 
-            {(optionRNG === RNGOptions.LinearCongruential ||
-              optionRNG === RNGOptions.MultiplicativeCongruential ||
-              optionRNG === RNGOptions.MixedCongruential) && (
+            {[
+              RNGOptions.LinearCongruential,
+              RNGOptions.MultiplicativeCongruential,
+              RNGOptions.MixedCongruential,
+            ].includes(optionRNG as RNGOptions) && (
               <>
                 <h1>Validation</h1>
                 <div css={divStyleRows}>
