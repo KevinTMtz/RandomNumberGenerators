@@ -136,14 +136,18 @@ const Layout = () => {
   };
 
   const getCurrentRNG = () => {
-    if (optionRNG === RNGOptions.MiddleSquares) return MiddleSquares;
-    else if (optionRNG === RNGOptions.LinearCongruential)
-      return LinearCongruential;
-    else if (optionRNG === RNGOptions.MixedCongruential)
-      return MixedCongruential;
-    else if (optionRNG === RNGOptions.MultiplicativeCongruential)
-      return MultiplicativeCongruential;
-    else return CombinedCongruential;
+    switch (optionRNG) {
+      case RNGOptions.MiddleSquares:
+        return MiddleSquares;
+      case RNGOptions.LinearCongruential:
+        return LinearCongruential;
+      case RNGOptions.MixedCongruential:
+        return MixedCongruential;
+      case RNGOptions.MultiplicativeCongruential:
+        return MultiplicativeCongruential;
+      default:
+        return CombinedCongruential;
+    }
   };
 
   const handleChangeAlpha = (value: string) => {
@@ -229,9 +233,7 @@ const Layout = () => {
         <form css={divStyleRows}>
           <FormControl
             fullWidth
-            focused={
-              randomsList.length > 0 ? !(randomsList.length > 0) : undefined
-            }
+            focused={randomsList.length > 0 ? false : undefined}
           >
             <InputLabel>Random Number Generator</InputLabel>
             <Select
@@ -303,7 +305,7 @@ const Layout = () => {
               }
               index={index}
               validateCompleteInput={validateCompleteInput}
-              randomsListLength={randomsList.length}
+              hasResults={randomsList.length > 0}
               requiredByOption={requiredByOption[optionRNG]}
             />
           ))}

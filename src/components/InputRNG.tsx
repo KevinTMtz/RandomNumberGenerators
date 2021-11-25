@@ -22,7 +22,7 @@ interface InputRNGProps {
     inputVals: InputValues[],
     numOfRan?: string | undefined,
   ) => void;
-  randomsListLength: number;
+  hasResults: boolean;
 }
 
 const InputRNG = (props: InputRNGProps) => {
@@ -60,13 +60,9 @@ const InputRNG = (props: InputRNGProps) => {
           value={props.inputValuesArr[props.index][inputStr]}
           onChange={(event) => handleInputChange(inputStr, event.target.value)}
           InputProps={{
-            readOnly: props.randomsListLength > 0,
+            readOnly: props.hasResults,
           }}
-          focused={
-            props.randomsListLength > 0
-              ? !(props.randomsListLength > 0)
-              : undefined
-          }
+          focused={props.hasResults ? false : undefined}
           required
         />
       ))}
